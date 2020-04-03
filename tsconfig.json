@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {},
+	"files": [
+		"./src/main.ts",
+		"./src/envelopes/envelopes_main.ts",
+		"./src/transactions/transactions_main.ts"
+	]
+}
