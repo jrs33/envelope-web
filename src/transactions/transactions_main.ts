@@ -1,4 +1,5 @@
-import { getEnvelopesAsync } from '../envelopes/envelopes_service'
+import { getEnvelopesAsync } from '../envelopes/envelopes_service';
+import { createTableHeader, createTableBody } from '../util/table_util';
 
 function getTransactions() {
 	var xhr = new XMLHttpRequest();
@@ -82,33 +83,30 @@ function createTransaction(transaction) {
 
 function parseTransactions(transactionJson) {
 	let transactionObject = JSON.parse(transactionJson);
+	console.log(transactionObject);
 
 	const transactionsParent = document.getElementById('main');
 	var transactionsDiv = document.createElement('div');
 	transactionsParent.appendChild(transactionsDiv);
 
-	var transactionDateList = document.createElement('ul');
-	var transactionAmountList = document.createElement('ul');
-	var transactionNameList = document.createElement('ul');
-	var transactionTypeList = document.createElement('ul');
-
-	transactionsDiv.appendChild(transactionDateList);
-	transactionsDiv.appendChild(transactionAmountList);
-	transactionsDiv.appendChild(transactionNameList);
-	transactionsDiv.appendChild(transactionTypeList);
+	const transactionTableHeader = createTableHeader(["Date", "Name", "Type", "Amount"]);
+	
+	var transactionRows = [];
 	for(const transaction of transactionObject) {
 
-		appendList(transaction.date, transactionDateList);
-		appendList(transaction.amount, transactionAmountList);
-		appendList(transaction.transactionName, transactionNameList);
-		appendList(transaction.transactionType, transactionTypeList);
+		let transactionRow = [];
+		transactionRow.push(transaction.date);
+		transactionRow.push(transaction.transactionName);
+		transactionRow.push(transaction.transactionType);
+		transactionRow.push(transaction.amount);
+		transactionRows.push(transactionRow);
 	}
-}
 
-function appendList(value, list) {
-	let newListEntry = document.createElement('li');
-	newListEntry.innerHTML = value;
-	list.appendChild(newListEntry);
+	var table = document.createElement('table');
+	table.className = "table";
+	table.appendChild(transactionTableHeader);
+	table.appendChild(createTableBody(transactionRows));
+	transactionsDiv.appendChild(table);
 }
 
 export { getTransactions, renderCreateTransactionForm };
