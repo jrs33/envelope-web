@@ -13,7 +13,7 @@ function getTransactions() {
 
 function renderCreateTransactionForm() {
 	
-	const transactionsParent = document.getElementById('transactions');
+	const transactionsParent = document.getElementById('main');
 	var createTransactionDiv = document.createElement('div');
 	transactionsParent.appendChild(createTransactionDiv);
 
@@ -83,7 +83,7 @@ function createTransaction(transaction) {
 function parseTransactions(transactionJson) {
 	let transactionObject = JSON.parse(transactionJson);
 
-	const transactionsParent = document.getElementById('transactions');
+	const transactionsParent = document.getElementById('main');
 	var transactionsDiv = document.createElement('div');
 	transactionsParent.appendChild(transactionsDiv);
 

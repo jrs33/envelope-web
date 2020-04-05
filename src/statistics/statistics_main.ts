@@ -10,7 +10,7 @@ function getRemaining() {
 }
 
 function parseRemaining(remaining) {
-	const statsParent = document.getElementById('stats');
+	const statsParent = document.getElementById('main');
 	var remainingDiv = document.createElement('div');
 	statsParent.appendChild(remainingDiv);
 

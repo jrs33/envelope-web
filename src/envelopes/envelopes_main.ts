@@ -7,7 +7,7 @@ function getEnvelopes() {
 function parseEnvelopes(envelopeJson) {
 	let envelopeObject = JSON.parse(envelopeJson);
 
-	const envelopesParent = document.getElementById('envelopes');
+	const envelopesParent = document.getElementById('main');
 	var envelopesDiv = document.createElement('div');
 	envelopesParent.appendChild(envelopesDiv);
 

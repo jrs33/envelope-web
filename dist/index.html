@@ -9,9 +9,17 @@
 		<title>Envelopes</title>
 	</head>
 	<body>
-		<div class="container">
+		<div class="container-fluid">
 			<h1>Envelopes</h1>
-			<div class="row">
+			<ul class="nav nav-tabs" id="navigation" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#envelopes" role="tab" aria-controls="home" aria-selected="true">Envelopes</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#transactions" role="tab" aria-controls="profile" aria-selected="false">Transactions</a>
+				</li>
+			</ul>
+			<div id="main" class="row">
 				<div id="transactions" class="col-sm"></div>
 				<div id="stats" class="col-sm"></div>
 				<div id="envelopes" class="col-sm"></div>
