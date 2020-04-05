@@ -1,14 +1,6 @@
-/*
-<ul class="nav nav-tabs" id="navigation" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#envelopes" role="tab" aria-controls="home" aria-selected="true">Envelopes</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#transactions" role="tab" aria-controls="profile" aria-selected="false">Transactions</a>
-        <a class="nav-link" id="transaction-tab" data-toggle="tab" role="tab" aria-controls="home" aria-selected="false" href="#transactions">Transactions</a>
-    </li>
-</ul>
-*/
+import { getEnvelopes } from '../envelopes/envelopes_main';
+import { getRemaining } from '../statistics/statistics_main';
+import { getTransactions, renderCreateTransactionForm } from '../transactions/transactions_main';
 
 function initializeNavigation() {
 
@@ -17,12 +9,8 @@ function initializeNavigation() {
     navList.id = "navigation";
     navList.setAttribute("role", "tablist");
     
-    var envelopeNavItem = createNavItem("envelope-tab", "#envelopes", "Envelopes");
-    var transactionNavItem = createNavItem("transaction-tab", "#transactions", "Transactions");
-
-    envelopeNavItem.firstElementChild.className = "nav-link active";
-    envelopeNavItem.firstElementChild.setAttribute("aria-selected", "true");
-    envelopeNavItem.firstElementChild.setAttribute("aria-controls", "home");
+    var envelopeNavItem = createNavItem("envelope-tab", "#envelopes", "Envelopes", () => {getRemaining(); getEnvelopes();}, true);
+    var transactionNavItem = createNavItem("transaction-tab", "#transactions", "Transactions", () => {renderCreateTransactionForm(); getTransactions();}, false);    
 
     navList.appendChild(envelopeNavItem);
     navList.appendChild(transactionNavItem);
@@ -30,11 +18,15 @@ function initializeNavigation() {
     return navList;
 }
 
-function createNavItem(id, href, description) {
+function createNavItem(id, href, description, handlerFunction, isClicked) {
     var navItem = document.createElement('li');
     navItem.className = "nav-item";
 
     var linkItem = document.createElement('a');
+    linkItem.onclick = () => createOnClickHandler(linkItem, handlerFunction);
+    if(isClicked) {
+        linkItem.click();
+    }
     linkItem.className = "nav-link";
     linkItem.id = id;
     linkItem.setAttribute("data-toggle", "tab");
@@ -46,6 +38,18 @@ function createNavItem(id, href, description) {
 
     navItem.appendChild(linkItem);
     return navItem;
+}
+
+function createOnClickHandler(linkItem, handlerFunction) {
+    clearContent("main");
+    handlerFunction();
+}
+
+function clearContent(elementId) {
+    var mainDiv = document.getElementById(elementId);
+    while(mainDiv.firstChild) {
+        mainDiv.removeChild(mainDiv.firstChild);
+    }
 }
 
 export { initializeNavigation };
