@@ -12,9 +12,11 @@ function parseEnvelopes(envelopeJson) {
 	envelopesParent.appendChild(envelopesDiv);
 
 	const tableHeader = createTableHeader();
+	tableHeader.align = "center";
 	const tableBody = createTableBody(envelopeObject);
+	tableBody.align = "center";
 	var table = document.createElement('table');
-	table.className = "table table-dark";
+	table.className = "table";
 	table.appendChild(tableHeader);
 	table.appendChild(tableBody);
 	envelopesDiv.appendChild(table);

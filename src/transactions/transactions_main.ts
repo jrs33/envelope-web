@@ -83,13 +83,14 @@ function createTransaction(transaction) {
 
 function parseTransactions(transactionJson) {
 	let transactionObject = JSON.parse(transactionJson);
-	console.log(transactionObject);
+	console.log(transactionObject)
 
 	const transactionsParent = document.getElementById('main');
 	var transactionsDiv = document.createElement('div');
 	transactionsParent.appendChild(transactionsDiv);
 
 	const transactionTableHeader = createTableHeader(["Date", "Name", "Type", "Amount"]);
+	transactionTableHeader.align = "center";
 	
 	var transactionRows = [];
 	for(const transaction of transactionObject) {
@@ -105,7 +106,10 @@ function parseTransactions(transactionJson) {
 	var table = document.createElement('table');
 	table.className = "table";
 	table.appendChild(transactionTableHeader);
-	table.appendChild(createTableBody(transactionRows));
+
+	const transactionTableBody = createTableBody(transactionRows);
+	transactionTableBody.align = "center";
+	table.appendChild(transactionTableBody);
 	transactionsDiv.appendChild(table);
 }
 
