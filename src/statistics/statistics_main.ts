@@ -14,10 +14,15 @@ function parseRemaining(remaining) {
 	var remainingDiv = document.createElement('div');
 	statsParent.appendChild(remainingDiv);
 
-	var remainingParagraph = document.createElement('p');
-	remainingDiv.appendChild(remainingParagraph);
+	remainingDiv.className = "jumbotron";
+	const remainingHeader = document.createElement('h1');
+	remainingHeader.className = "display-4";
+	remainingHeader.textContent = "$" + Math.round(remaining * 100) / 100;
+	remainingDiv.appendChild(remainingHeader);
 
-	remainingParagraph.textContent = "You have $" + remaining + " remaining this month";
+	const explain = document.createElement('p');
+	explain.textContent = "This is the amount of money you have remaining this month";
+	remainingDiv.appendChild(explain);
 }
 
 export { getRemaining };
