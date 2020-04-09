@@ -5,9 +5,8 @@ import { getTransactions, renderCreateTransactionForm } from '../transactions/tr
 function initializeNavigation() {
 
     var navList = document.createElement('ul');
-    navList.className = "nav nav-tabs";
+    navList.className = "nav nav-pills nav-fill justify-content-center";
     navList.id = "navigation";
-    navList.setAttribute("role", "tablist");
     
     var envelopeNavItem = createNavItem("envelope-tab", "#envelopes", "Envelopes", () => {getRemaining(); getEnvelopes();}, true);
     var transactionNavItem = createNavItem("transaction-tab", "#transactions", "Transactions", () => {renderCreateTransactionForm(); getTransactions();}, false);    
