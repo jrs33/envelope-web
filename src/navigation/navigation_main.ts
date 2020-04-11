@@ -1,4 +1,4 @@
-import { getEnvelopes } from '../envelopes/envelopes_main';
+import { getEnvelopes, renderCreateEnvelopeForm } from '../envelopes/envelopes_main';
 import { getRemaining } from '../statistics/statistics_main';
 import { getTransactions, renderCreateTransactionForm } from '../transactions/transactions_main';
 
@@ -8,7 +8,7 @@ function initializeNavigation() {
     navList.className = "nav nav-pills nav-fill justify-content-center";
     navList.id = "navigation";
     
-    var envelopeNavItem = createNavItem("envelope-tab", "#envelopes", "Envelopes", () => {getRemaining(); getEnvelopes();}, true);
+    var envelopeNavItem = createNavItem("envelope-tab", "#envelopes", "Envelopes", () => {getRemaining(); getEnvelopes(); renderCreateEnvelopeForm();}, true);
     var transactionNavItem = createNavItem("transaction-tab", "#transactions", "Transactions", () => {renderCreateTransactionForm(); getTransactions();}, false);    
 
     navList.appendChild(envelopeNavItem);
