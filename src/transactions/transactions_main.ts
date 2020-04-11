@@ -1,6 +1,8 @@
 import { getEnvelopesAsync } from '../envelopes/envelopes_service';
 import { createTableHeader, createTableBody } from '../util/table_util';
 
+const CONFIG = require('../../config.local.json');
+
 function getTransactions() {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -8,7 +10,8 @@ function getTransactions() {
 			parseTransactions(xhr.responseText);
 		}
 	};
-	xhr.open('GET', 'http://localhost:8080/transactions?from=0');
+	console.log(CONFIG);
+	xhr.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
 	xhr.send();
 }
 
@@ -147,7 +150,7 @@ function createTransaction(transaction) {
 			console.log("done! " + transaction);
 		}
 	};
-	xhr.open('POST', 'http://localhost:8080/transaction/create');
+	xhr.open('POST', CONFIG.envelope_api.host + '/transaction/create');
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(JSON.stringify({
 		transactionName: transactionName,

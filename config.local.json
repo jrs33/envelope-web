@@ -1,0 +1,5 @@
+{
+    "envelope_api" : {
+        "host" : "http://localhost:8080"
+    }
+}

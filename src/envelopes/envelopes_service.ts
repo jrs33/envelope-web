@@ -1,3 +1,5 @@
+const CONFIG = require('../../config.local.json');
+
 function getEnvelopesAsync(asyncHandler) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -5,7 +7,7 @@ function getEnvelopesAsync(asyncHandler) {
 			asyncHandler(xhr.responseText);
 		}
 	};
-	xhr.open('GET', 'http://localhost:8080/envelopes?from=0');
+	xhr.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
 	xhr.send();
 }
 

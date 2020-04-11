@@ -1,5 +1,7 @@
 import { getEnvelopesAsync } from './envelopes_service';
 
+const CONFIG = require('../../config.local.json');
+
 function renderCreateEnvelopeForm() {
 	
 	const envelopeParent = document.getElementById('main');
@@ -69,7 +71,7 @@ function createEnvelope(envelope) {
 			console.log("done! " + envelope);
 		}
 	};
-	xhr.open('POST', 'http://localhost:8080/envelope/create');
+	xhr.open('POST', CONFIG.envelope_api.host + '/envelope/create');
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(JSON.stringify({
 		name: envelopeName,

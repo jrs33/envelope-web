@@ -1,3 +1,5 @@
+const CONFIG = require('../../config.local.json');
+
 function getRemaining() {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -5,7 +7,7 @@ function getRemaining() {
 			parseRemaining(xhr.responseText);
 		}
 	};
-	xhr.open('GET', 'http://localhost:8080/envelope/statistics/remaining');
+	xhr.open('GET', CONFIG.envelope_api.host + '/envelope/statistics/remaining');
 	xhr.send();
 }
 
