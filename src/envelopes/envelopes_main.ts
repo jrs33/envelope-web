@@ -1,5 +1,83 @@
 import { getEnvelopesAsync } from './envelopes_service';
 
+function renderCreateEnvelopeForm() {
+	
+	const envelopeParent = document.getElementById('main');
+	var createEnvelopeDiv = document.createElement('div');
+	envelopeParent.appendChild(createEnvelopeDiv);
+
+	var createEnvelopeForm = document.createElement('form');
+	createEnvelopeForm.id = "envelopeForm";
+	createEnvelopeDiv.appendChild(createEnvelopeForm);
+
+	// envelope name input
+	var envelopeNameFormGroup = document.createElement('div');
+	envelopeNameFormGroup.id = "envelopeNameFormGroup";
+	envelopeNameFormGroup.className = "form-group";
+	createEnvelopeForm.appendChild(envelopeNameFormGroup);
+
+	var createEnvelopeName = document.createElement('input');
+	createEnvelopeName.id = "envelopeNameInput";
+	createEnvelopeName.name = "name";
+	createEnvelopeName.className = "form-control";
+	createEnvelopeName.placeholder = "ex: Groceries";
+
+	var createEnvelopeNameLabel = document.createElement('label');
+	createEnvelopeNameLabel.setAttribute("for", createEnvelopeName.id);
+	createEnvelopeNameLabel.textContent = "Name";
+
+	envelopeNameFormGroup.appendChild(createEnvelopeNameLabel);
+	envelopeNameFormGroup.appendChild(createEnvelopeName);
+
+	// envelope allocation input
+	var envelopeAmountFormGroup = document.createElement('div');
+	envelopeAmountFormGroup.id = "envelopeAmountFormGroup";
+	envelopeAmountFormGroup.className = "form-group";
+	createEnvelopeForm.appendChild(envelopeAmountFormGroup);
+
+	var createEnvelopeAmount = document.createElement('input');
+	createEnvelopeAmount.id = "envelopeAmountInput";
+	createEnvelopeAmount.name = "allocation";
+	createEnvelopeAmount.className = "form-control";
+	createEnvelopeAmount.placeholder = "ex: 23.23";
+
+	var createEnvelopeAmountLabel = document.createElement('label');
+	createEnvelopeAmountLabel.setAttribute("for", createEnvelopeAmount.id);
+	createEnvelopeAmountLabel.textContent = "Amount";
+
+	envelopeAmountFormGroup.appendChild(createEnvelopeAmountLabel);
+	envelopeAmountFormGroup.appendChild(createEnvelopeAmount);
+
+	var createEnvelopeButton = document.createElement('button');
+	createEnvelopeButton.textContent = "Create";
+	createEnvelopeButton.className = "btn btn-primary";
+	createEnvelopeForm.appendChild(createEnvelopeButton);
+
+	createEnvelopeForm.addEventListener('submit', createEnvelope)
+}
+
+function createEnvelope(envelope) {
+	envelope.preventDefault();
+
+	console.log(envelope.target);
+	const envelopeName = envelope.target["name"].value;
+	const envelopeAmount = envelope.target["allocation"].value;
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			console.log("done! " + envelope);
+		}
+	};
+	xhr.open('POST', 'http://localhost:8080/envelope/create');
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(JSON.stringify({
+		name: envelopeName,
+		allocatedMoney: envelopeAmount,
+		spentMoney: 0
+	}));
+}
+
 function getEnvelopes() {
 	getEnvelopesAsync(parseEnvelopes);
 }
@@ -77,4 +155,4 @@ function createTableBody(envelopeObject) {
 	return tableBody;
 }
 
-export { getEnvelopes };
+export { getEnvelopes, renderCreateEnvelopeForm };
