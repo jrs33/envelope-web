@@ -50,6 +50,28 @@ function renderCreateEnvelopeForm() {
 	envelopeAmountFormGroup.appendChild(createEnvelopeAmountLabel);
 	envelopeAmountFormGroup.appendChild(createEnvelopeAmount);
 
+	// envelope type input
+	var envelopeTypeFormGroup = document.createElement('div');
+	envelopeTypeFormGroup.id = "envelopeTypeFormGroup";
+	envelopeTypeFormGroup.className = "form-group";
+	createEnvelopeForm.appendChild(envelopeTypeFormGroup);
+
+	var selectEnvelopeTypeElement = document.createElement('select');
+	selectEnvelopeTypeElement.id = "envelopeFormTypeSelect";
+	selectEnvelopeTypeElement.name = "envelopeType";
+	selectEnvelopeTypeElement.className = "form-control";
+
+	var createEnvelopeTypeLabel = document.createElement('label');
+	createEnvelopeTypeLabel.setAttribute("for", selectEnvelopeTypeElement.id);
+	createEnvelopeTypeLabel.textContent = "Type";
+
+	envelopeTypeFormGroup.appendChild(createEnvelopeTypeLabel);
+	envelopeTypeFormGroup.appendChild(selectEnvelopeTypeElement);
+	getEnvelopeTypes();
+
+	envelopeAmountFormGroup.appendChild(createEnvelopeTypeLabel);
+	envelopeAmountFormGroup.appendChild(selectEnvelopeTypeElement);
+
 	var createEnvelopeButton = document.createElement('button');
 	createEnvelopeButton.textContent = "Create";
 	createEnvelopeButton.className = "btn btn-primary";
@@ -64,6 +86,7 @@ function createEnvelope(envelope) {
 	console.log(envelope.target);
 	const envelopeName = envelope.target["name"].value;
 	const envelopeAmount = envelope.target["allocation"].value;
+	const envelopeType = envelope.target["envelopeFormTypeSelect"].value;
 
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -75,6 +98,7 @@ function createEnvelope(envelope) {
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(JSON.stringify({
 		name: envelopeName,
+		envelopeType: envelopeType,
 		allocatedMoney: envelopeAmount,
 		spentMoney: 0
 	}));
@@ -155,6 +179,19 @@ function createTableBody(envelopeObject) {
 	}
 
 	return tableBody;
+}
+
+function getEnvelopeTypes() {
+	const transactionTypes = ["SAVING", "EXPENSE"];
+
+	var selectElement = document.getElementById('envelopeFormTypeSelect');
+	for (const type of transactionTypes) {
+
+		var option = document.createElement('option');
+		option.textContent = type;
+		option.value = type;
+		selectElement.appendChild(option);
+	}
 }
 
 export { getEnvelopes, renderCreateEnvelopeForm };
