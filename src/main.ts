@@ -1,8 +1,8 @@
-import { initializeNavigation } from './navigation/navigation_main';
+import { Transactions } from './transactions/transactions'
 
-initializePage();
-
-function initializePage() {
-    var navDiv = document.getElementById("navigation");
-    navDiv.appendChild(initializeNavigation());
+const app = async () => {
+    const transactions = new Transactions();
+    transactions.connect();
 }
+
+document.addEventListener("DOMContentLoaded", app);
