@@ -26,7 +26,6 @@ class TransactionCreator {
 		createTransactionName.id = "transactionNameInput";
 		createTransactionName.name = "name";
 		createTransactionName.className = "form-control";
-		createTransactionName.placeholder = "ex: Groceries";
 
 		var createTransactionNameLabel = document.createElement('label');
 		createTransactionNameLabel.setAttribute("for", createTransactionName.id);
@@ -45,7 +44,6 @@ class TransactionCreator {
 		createTransactionAmount.id = "transactionAmountInput";
 		createTransactionAmount.name = "amount";
 		createTransactionAmount.className = "form-control";
-		createTransactionAmount.placeholder = "ex: 23.23";
 
 		var createTransactionAmountLabel = document.createElement('label');
 		createTransactionAmountLabel.setAttribute("for", createTransactionAmount.id);

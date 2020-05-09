@@ -24,17 +24,26 @@ class Transactions {
             if(this.route === 'transactions') {
                 this.connect();
             }
-        })
+        });
     }
 
     async connect() {
 
-        const contentDiv = document.getElementById('main');
+        let contentDiv = document.getElementById('main');
         contentDiv.innerHTML = '';
     
-        const createTransactionForm = this._transactionCreator.renderCreateTransactionForm();
+        let formHeader = document.createElement('h2');
+        formHeader.textContent = 'Record Transaction';
+        let createTransactionForm = this._transactionCreator.renderCreateTransactionForm();
         createTransactionForm.id = 'createTransactionForm';
+        contentDiv.appendChild(formHeader);
         contentDiv.appendChild(createTransactionForm);
+
+        let divider = document.createElement('hr');
+        let transactionTableHeader = document.createElement('h2');
+        transactionTableHeader.textContent = 'Transaction History';
+        contentDiv.appendChild(divider);
+        contentDiv.appendChild(transactionTableHeader);
 
         this._transactionFetcher.getTransactions(
             transactionJson => {

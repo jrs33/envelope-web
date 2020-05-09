@@ -26,7 +26,6 @@ class EnvelopeCreator {
         createEnvelopeName.id = "envelopeNameInput";
         createEnvelopeName.name = "name";
         createEnvelopeName.className = "form-control";
-        createEnvelopeName.placeholder = "ex: Groceries";
     
         var createEnvelopeNameLabel = document.createElement('label');
         createEnvelopeNameLabel.setAttribute("for", createEnvelopeName.id);
@@ -45,7 +44,6 @@ class EnvelopeCreator {
         createEnvelopeAmount.id = "envelopeAmountInput";
         createEnvelopeAmount.name = "allocation";
         createEnvelopeAmount.className = "form-control";
-        createEnvelopeAmount.placeholder = "ex: 23.23";
     
         var createEnvelopeAmountLabel = document.createElement('label');
         createEnvelopeAmountLabel.setAttribute("for", createEnvelopeAmount.id);

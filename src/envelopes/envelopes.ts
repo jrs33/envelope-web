@@ -22,21 +22,29 @@ class Envelopes {
 
         this.router.eventSource.addEventListener("routechange", () => {
             this.route = this.router.getRoute();
-            console.log('envelopes!' + this.router.getRoute());
             if(this.route === Envelopes.ROUTE_TO_ACTION) {
                 this.connect();
             }
-        })
+        });
     }
 
     async connect() {
 
-        const contentDiv = document.getElementById('main');
+        let contentDiv = document.getElementById('main');
         contentDiv.innerHTML = '';
 
+        let formHeader = document.createElement('h2');
+        formHeader.textContent = 'Create Envelope';
         let createEnvelopeForm = this._envelopeCreator.renderCreateEnvelopeForm();
         createEnvelopeForm.id = 'createEnvelopeForm';
+        contentDiv.appendChild(formHeader);
         contentDiv.appendChild(createEnvelopeForm);
+
+        let divider = document.createElement('hr');
+        let envelopeTableHeader = document.createElement('h2');
+        envelopeTableHeader.textContent = 'Your Envelopes';
+        contentDiv.appendChild(divider);
+        contentDiv.appendChild(envelopeTableHeader);
 
         this._envelopeFetcher.getEnvelopesAsync(
             envelopeJson => {
@@ -52,7 +60,7 @@ class Envelopes {
                 document.getElementById('envelopeTable').remove();
                 this._envelopeFetcher.getEnvelopesAsync(
                     envelopeJson => {
-                        const table = this._envelopeFetcher.parseEnvelopes(envelopeJson);
+                        let table = this._envelopeFetcher.parseEnvelopes(envelopeJson);
                         table.id = 'envelopeTable';
                         contentDiv.appendChild(table);
                     }
