@@ -19,7 +19,6 @@ class Transactions {
         this.route = this.router.getRoute();
 
         this.router.eventSource.addEventListener("routechange", () => {
-            console.log('transactions_route_change:' + this.router.getRoute())
             this.route = this.router.getRoute();
             if(this.route === 'transactions') {
                 this.connect();
@@ -47,7 +46,7 @@ class Transactions {
 
         this._transactionFetcher.getTransactions(
             transactionJson => {
-                const table = this._transactionFetcher.parseTransactions(transactionJson);
+                let table = this._transactionFetcher.parseTransactions(transactionJson);
                 table.id = 'transactionTable';
                 contentDiv.appendChild(table);
             }
@@ -59,7 +58,7 @@ class Transactions {
                 document.getElementById('transactionTable').remove();
                 this._transactionFetcher.getTransactions(
                     transactionJson => {
-                        const table = this._transactionFetcher.parseTransactions(transactionJson);
+                        let table = this._transactionFetcher.parseTransactions(transactionJson);
                         table.id = 'transactionTable';
                         contentDiv.appendChild(table);
                     }
