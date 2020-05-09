@@ -1,10 +1,14 @@
-import { getEnvelopesAsync } from '../envelopes/envelopes_service';
+import { EnvelopeFetcher } from '../envelopes/envelope_get';
 
 const CONFIG = require('../../config.local.json');
 
 class TransactionCreator {
 
+	_envelopeFetcher : EnvelopeFetcher;
+
 	constructor() {
+
+		this._envelopeFetcher = new EnvelopeFetcher();
 	}
 
 	renderCreateTransactionForm() : HTMLFormElement {
@@ -60,7 +64,7 @@ class TransactionCreator {
 		selectEnvelopeElement.id = "transactionFormEnvelopeSelect";
 		selectEnvelopeElement.name = "id";
 		selectEnvelopeElement.className = "form-control";
-		getEnvelopesAsync(envelopeJson => {
+		this._envelopeFetcher.getEnvelopesAsync(envelopeJson => {
 			this.renderCreateTransactionEnvelopes(selectEnvelopeElement, envelopeJson);
 		});
 
