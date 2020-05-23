@@ -2,5 +2,11 @@
 	"compilerOptions": {},
 	"files": [
 		"./src/main.ts"
+	],
+	"typeRoots": [
+		"./node_modules/@types"
+	],
+	"types": [
+		"auth0-js"
 	]
 }

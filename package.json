@@ -17,5 +17,9 @@
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "@types/auth0-js": "^9.13.1",
+    "auth0-js": "^9.13.2"
   }
 }

@@ -1,5 +1,9 @@
 {
-    "envelope_api" : {
-        "host" : "http://localhost:8080"
+    "envelope_api": {
+        "host": "http://budgetbackend.ngrok.io"
+    },
+    "auth": {
+        "client_id": "tmtHO16eZKAL7YsvvvrShUQ57L7OaTJU",
+        "domain": "dev-bt615855.auth0.com"
     }
 }
