@@ -1,4 +1,5 @@
 import { createTableHeader, createTableBody } from '../util/table_util';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
 
@@ -15,7 +16,8 @@ class EnvelopeFetcher {
             }
         };
         xhr.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
-        xhr.send();
+        let authDecorator = new AuthorizationDecorator(xhr);
+        authDecorator.send();
     }
 
     parseEnvelopes(envelopeJson) : HTMLTableElement {
