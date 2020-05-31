@@ -1,4 +1,5 @@
 import { createTableHeader, createTableBody } from '../util/table_util';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
 
@@ -8,14 +9,15 @@ class TransactionFetcher {
     }
 
     getTransactions(callback) {
-        let xhr = new XMLHttpRequest();
+        var rawXmlHttpRequest = new XMLHttpRequest();
+        rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
+        var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 callback(xhr.responseText);
             }
         };
         console.log(CONFIG);
-        xhr.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
         xhr.send();
     }
 

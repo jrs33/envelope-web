@@ -9,15 +9,16 @@ class EnvelopeFetcher {
     }
 
     getEnvelopesAsync(callback) {
-        var xhr = new XMLHttpRequest();
+        var rawXmlRequest = new XMLHttpRequest();
+        rawXmlRequest.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
+
+        var xhr = new AuthorizationDecorator(rawXmlRequest).decorate();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 callback(xhr.responseText);
             }
         };
-        xhr.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
-        let authDecorator = new AuthorizationDecorator(xhr);
-        authDecorator.send();
+        xhr.send();
     }
 
     parseEnvelopes(envelopeJson) : HTMLTableElement {

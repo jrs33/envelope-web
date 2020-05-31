@@ -1,4 +1,5 @@
 import { EnvelopeFetcher } from './envelope_get';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
 
@@ -97,13 +98,14 @@ class EnvelopeCreator {
         const envelopeAmount = envelope.target["allocation"].value;
         const envelopeType = envelope.target["envelopeFormTypeSelect"].value;
     
-        var xhr = new XMLHttpRequest();
+        var rawXMLRequest = new XMLHttpRequest();
+        rawXMLRequest.open('POST', CONFIG.envelope_api.host + '/envelope/create');
+        var xhr = new AuthorizationDecorator(rawXMLRequest).decorate();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 callback();
             }
         };
-        xhr.open('POST', CONFIG.envelope_api.host + '/envelope/create');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({
             name: envelopeName,

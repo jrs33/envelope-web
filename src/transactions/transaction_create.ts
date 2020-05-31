@@ -1,4 +1,5 @@
 import { EnvelopeFetcher } from '../envelopes/envelope_get';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
 
@@ -132,13 +133,14 @@ class TransactionCreator {
 		const transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
 		const transactionType = transaction.target["transactionType"].value;
 
-		var xhr = new XMLHttpRequest();
+		var rawXmlHttpRequest = new XMLHttpRequest();
+		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create');
+        var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				callback();
 			}
 		};
-		xhr.open('POST', CONFIG.envelope_api.host + '/transaction/create');
 		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.send(JSON.stringify({
 			transactionName: transactionName,

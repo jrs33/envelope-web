@@ -13,14 +13,14 @@ class AuthorizationDecorator {
         this.auth = AUTH;
     }
 
-    send() {
+    decorate() : XMLHttpRequest {
         if(!access) {
-            //initiate logout
+            //TODO: initiate logout
             return;
         }
 
         this.request.setRequestHeader("Authorization", "Bearer " + access);
-        this.request.send();
+        return this.request;
     }
 }
 
