@@ -19,6 +19,7 @@ class AuthorizationDecorator {
             return;
         }
 
+        this.request.withCredentials = true;
         this.request.setRequestHeader("Authorization", "Bearer " + access);
         return this.request;
     }
