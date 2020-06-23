@@ -1,6 +1,6 @@
 {
     "envelope_api": {
-        "host": "http://budgetbackend.ngrok.io"
+        "host": "https://peaceful-forest-68892.herokuapp.com/"
     },
     "auth": {
         "client_id": "tmtHO16eZKAL7YsvvvrShUQ57L7OaTJU",
