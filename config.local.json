@@ -7,7 +7,7 @@
         "domain": "dev-bt615855.auth0.com",
         "response_type": "token id_token",
         "audience": "https://envelope-api.moneyme.com",
-        "redirect_uri": "http://localhost:8081",
+        "redirect_uri": "https://boiling-peak-69813.herokuapp.com/",
         "scope": "openid profile read:envelopes create:envelopes read:transactions create:transactions"
     }
 }
