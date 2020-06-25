@@ -17,7 +17,6 @@ class TransactionFetcher {
                 callback(xhr.responseText);
             }
         };
-        console.log(CONFIG);
         xhr.send();
     }
 

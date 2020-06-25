@@ -14,7 +14,7 @@ class AuthorizationDecorator {
     }
 
     decorate() : XMLHttpRequest {
-        console.log('debug: ' + access);
+        debugger;
         if(!access) {
             //TODO: initiate logout
             return;
