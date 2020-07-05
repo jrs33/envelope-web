@@ -8,22 +8,33 @@ export var access = null;
 
 const app = async () => {
 
-    AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
-        debugger;
-        if(authResult && authResult.accessToken && authResult.idToken) {
-            id = authResult.idToken;
-            access = authResult.accessToken;
-        } else {
-            console.log("auth missing: " + error);
-            AUTH.authorize();
-        }
-
+    console.log('ayy: ' + process.env.NODE_ENV);
+    debugger;
+    if (process.env.NODE_ENV == 'development') { 
+        console.log('running_in_dev_env');
         // register route handlers, and display envelopes by default
         let transactionConnector = new Transactions();
         let envelopeConnector = new Envelopes();
         let logout = new Logout();
         envelopeConnector.connect();
-    });
+    } else {
+        AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
+            debugger;
+            if(authResult && authResult.accessToken && authResult.idToken) {
+                id = authResult.idToken;
+                access = authResult.accessToken;
+            } else {
+                console.log("auth missing: " + error);
+                AUTH.authorize();
+            }
+    
+            // register route handlers, and display envelopes by default
+            let transactionConnector = new Transactions();
+            let envelopeConnector = new Envelopes();
+            let logout = new Logout();
+            envelopeConnector.connect();
+        });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", app);

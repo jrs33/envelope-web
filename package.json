@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build-dev": "webpack --mode=development",
     "clean_install": "rm -rf node_modules/ && npm install",
-    "start-dev": "webpack-dev-server --open",
+    "start-dev": "NODE_ENV=development node server.js",
     "start": "node server.js",
     "heroku-postbuild": "webpack -p"
   },
@@ -17,12 +17,13 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "webpack-cli": "^3.3.12",
+    "@types/auth0-js": "^9.13.1",
+    "@types/node": "^14.0.14",
+    "auth0-js": "^9.13.2",
+    "express": "^4.17.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.0",
-    "@types/auth0-js": "^9.13.1",
-    "auth0-js": "^9.13.2",
-    "express": "^4.17.1"
+    "webpack-cli": "^3.3.12"
   }
 }
