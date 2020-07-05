@@ -14,7 +14,11 @@ class AuthorizationDecorator {
     }
 
     decorate() : XMLHttpRequest {
-        debugger;
+        
+        if(process.env.NODE_ENV == 'development') {
+            return this.request;
+        }
+
         if(!access) {
             //TODO: initiate logout
             return;

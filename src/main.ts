@@ -8,8 +8,6 @@ export var access = null;
 
 const app = async () => {
 
-    console.log('ayy: ' + process.env.NODE_ENV);
-    debugger;
     if (process.env.NODE_ENV == 'development') { 
         console.log('running_in_dev_env');
         // register route handlers, and display envelopes by default
