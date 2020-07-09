@@ -31,8 +31,9 @@ const app = async () => {
             // register route handlers, and display envelopes by default
             let transactionConnector = new Transactions();
             let envelopeConnector = new Envelopes();
+            let calendarConnector = new Calendar();
             let logout = new Logout();
-            envelopeConnector.connect();
+            calendarConnector.connect();
         });
     }
 }
