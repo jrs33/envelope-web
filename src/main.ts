@@ -1,5 +1,6 @@
 import { Transactions } from './transactions/transactions'
 import { Envelopes } from './envelopes/envelopes';
+import { Calendar } from './calendar/calendar';
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
 
@@ -13,8 +14,9 @@ const app = async () => {
         // register route handlers, and display envelopes by default
         let transactionConnector = new Transactions();
         let envelopeConnector = new Envelopes();
+        let calendarConnector = new Calendar();
         let logout = new Logout();
-        envelopeConnector.connect();
+        calendarConnector.connect();
     } else {
         AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
             debugger;
