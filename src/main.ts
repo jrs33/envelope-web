@@ -1,6 +1,6 @@
 import { Transactions } from './transactions/transactions'
 import { Envelopes } from './envelopes/envelopes';
-import { Calendar } from './calendar/calendar';
+import { Dashboard } from './dashboard/dashboard';
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
 
@@ -14,9 +14,9 @@ const app = async () => {
         // register route handlers, and display envelopes by default
         let transactionConnector = new Transactions();
         let envelopeConnector = new Envelopes();
-        let calendarConnector = new Calendar();
+        let dashboardConnector = new Dashboard();
         let logout = new Logout();
-        calendarConnector.connect();
+        dashboardConnector.connect();
     } else {
         AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
             debugger;
@@ -31,9 +31,9 @@ const app = async () => {
             // register route handlers, and display envelopes by default
             let transactionConnector = new Transactions();
             let envelopeConnector = new Envelopes();
-            let calendarConnector = new Calendar();
+            let dashboardConnector = new Dashboard();
             let logout = new Logout();
-            calendarConnector.connect();
+            dashboardConnector.connect();
         });
     }
 }

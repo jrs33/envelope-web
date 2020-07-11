@@ -1,4 +1,3 @@
-import { Router } from '../routing/router';
 import { Weekdays } from './weekdays';
 
 class Calendar {
@@ -7,30 +6,7 @@ class Calendar {
     "July", "August", "September", "October", "November", "December"
   ];
 
-    router : Router;
-    route : String;
-
     constructor() {
-
-        this.router = new Router();
-        this.route = this.router.getRoute();
-
-        this.router.eventSource.addEventListener("routechange", () => {
-            this.route = this.router.getRoute();
-            if(this.route === 'dashboard') {
-                this.connect();
-            }
-        });
-    }
-
-    async connect() {
-
-        let contentDiv = document.getElementById("main");
-        contentDiv.innerHTML = '';
-
-        contentDiv.appendChild(this.getMonthHeader());
-        contentDiv.appendChild(this.getWeekHeaders());
-        contentDiv.appendChild(this.getDayList());
     }
 
     getMonthHeader() : HTMLDivElement {
@@ -52,7 +28,7 @@ class Calendar {
         return divElement;
     }
 
-    getWeekHeaders() : HTMLUListElement {
+    getWeekHeaders() : HTMLDivElement {
 
         let weekValues = Object.values(Weekdays);
         let weekHeader = document.createElement("ul");
@@ -63,31 +39,47 @@ class Calendar {
             entry.textContent = element;
             weekHeader.appendChild(entry);
         });
-
-        return weekHeader;
+        
+        let weekDiv = document.createElement('div');
+        weekDiv.appendChild(weekHeader);
+        return weekDiv;
     }
 
-    getDayList() : HTMLUListElement {
-
-        let dayList = document.createElement("ul");
-        dayList.className = "days";
+    getDayList() : Array<HTMLUListElement> {
 
         let currentDate = new Date();
         let currentMonth = currentDate.getMonth();
-        debugger;
+        
+        let weeks : Array<HTMLUListElement> = [];
+
+        let currDayCount = 0;
+        let weekList : HTMLUListElement = document.createElement('ul');
+        weekList.className = "weekdays"
         for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
 
-            let dayListElement = document.createElement("li");
-            dayListElement.textContent = i.toString();
+            let dayElement = document.createElement('li');
+            dayElement.textContent = i.toString();
 
-            dayList.appendChild(dayListElement);
+            weekList.appendChild(dayElement);
+            currDayCount = currDayCount + 1;
+            
+            if(currDayCount % 7 == 0) {
+                let weekListCopy = this.deepCloneNode(weekList);
+                weeks.push(weekListCopy);
+                
+                weekList.innerHTML = '';
+                currDayCount = 0;
+            }
         }
 
-        return dayList;
+        return weeks;
+    }
+
+    private deepCloneNode<T extends Node>(node: T) {
+        return <T>node.cloneNode(true);
     }
 
     private getDaysInMonth(month, year) {
-        
         return new Date(year, month+1, 0).getDate();
     }
 }
