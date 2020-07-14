@@ -1,4 +1,5 @@
 import { Weekdays } from './weekdays';
+import { TransactionFetcher } from '../transactions/transaction_get';
 
 class Calendar {
 
@@ -6,7 +7,11 @@ class Calendar {
     "July", "August", "September", "October", "November", "December"
   ];
 
+    transactionFetcher: TransactionFetcher;
+
     constructor() {
+
+        this.transactionFetcher = new TransactionFetcher();
     }
 
     getMonthHeader() : HTMLDivElement {
@@ -45,34 +50,43 @@ class Calendar {
         return weekDiv;
     }
 
-    getDayList() : Array<HTMLUListElement> {
+    async getDayList() : Promise<Array<HTMLUListElement>> {
 
         let currentDate = new Date();
         let currentMonth = currentDate.getMonth();
         
-        let weeks : Array<HTMLUListElement> = [];
+        return await this.transactionFetcher.getTransactionsPromise()
+            .then(transactions => {
+                debugger;
+                let transactionList = JSON.parse(transactions);
+                let weeks : Array<HTMLUListElement> = [];
 
-        let currDayCount = 0;
-        let weekList : HTMLUListElement = document.createElement('ul');
-        weekList.className = "weekdays"
-        for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
+                let currDayCount = 0;
+                let weekList : HTMLUListElement = document.createElement('ul');
+                weekList.className = "weekdays"
+                for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
 
-            let dayElement = document.createElement('li');
-            dayElement.textContent = i.toString();
+                    let dayElement = document.createElement('li');
+                    dayElement.textContent = i.toString();
 
-            weekList.appendChild(dayElement);
-            currDayCount = currDayCount + 1;
-            
-            if(currDayCount % 7 == 0) {
-                let weekListCopy = this.deepCloneNode(weekList);
-                weeks.push(weekListCopy);
-                
-                weekList.innerHTML = '';
-                currDayCount = 0;
-            }
-        }
+                    weekList.appendChild(dayElement);
+                    currDayCount = currDayCount + 1;
+                    
+                    if(currDayCount % 7 == 0) {
+                        let weekListCopy = this.deepCloneNode(weekList);
+                        weeks.push(weekListCopy);
+                        
+                        weekList.innerHTML = '';
+                        currDayCount = 0;
+                    }
+                }
 
-        return weeks;
+                return weeks;
+            })
+            .catch(error => {
+                console.log("error getting transactions:" + error);
+                return [];
+            });
     }
 
     private deepCloneNode<T extends Node>(node: T) {

@@ -20,6 +20,30 @@ class TransactionFetcher {
         xhr.send();
     }
 
+    getTransactionsPromise() : Promise<any> {
+        
+        return new Promise(function (resolve, reject) {
+            var rawXmlHttpRequest = new XMLHttpRequest();
+            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
+            
+            var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+            xhr.timeout = 2000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if(xhr.status == 200) {
+                        resolve(xhr.response);
+                    } else {
+                        reject(xhr.status);
+                    }
+                }
+            };
+            xhr.ontimeout = function () {
+                reject('timeout')
+            }
+            xhr.send();
+        });
+    }
+
     parseTransactions(transactionJson) : HTMLTableElement {
         let transactionObject = JSON.parse(transactionJson);
         console.log(transactionObject)

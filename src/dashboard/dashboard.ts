@@ -16,7 +16,7 @@ class Dashboard {
 
         this.router = new Router();
         this.route = this.router.getRoute();
-
+        
         this.router.eventSource.addEventListener("routechange", () => {
             this.route = this.router.getRoute();
             if(this.route === Dashboard.ROUTE_TO_ACTION) {
@@ -35,7 +35,7 @@ class Dashboard {
 
         let monthHeader : HTMLDivElement = this.calendar.getMonthHeader();
         let weekHeader : HTMLDivElement = this.calendar.getWeekHeaders();
-        let dayList : Array<HTMLUListElement> = this.calendar.getDayList();
+        let dayList : Array<HTMLUListElement> = await this.calendar.getDayList();
 
         let monthRow = document.createElement('div');
         monthRow.className = "row";
