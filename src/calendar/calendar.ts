@@ -59,11 +59,23 @@ class Calendar {
             .then(transactions => {
                 debugger;
                 let transactionList = JSON.parse(transactions);
+                let thisMonthsTransactions = new Map();
+                for(let i = 0; i < transactionList.length; i++) {
+                    let transactDate = this.parseDateFromTransaction(transactionList[i].date);
+                    if(transactDate.getMonth() == currentMonth) {
+                        if(thisMonthsTransactions.has(transactDate.getDay())) {
+                            thisMonthsTransactions.get(transactDate.getDay()).push(transactionList[i]);
+                        } else {
+                            thisMonthsTransactions.set(transactDate.getDay(), [transactionList[i]]);
+                        }
+                    }
+                }
+
                 let weeks : Array<HTMLUListElement> = [];
 
                 let currDayCount = 0;
                 let weekList : HTMLUListElement = document.createElement('ul');
-                weekList.className = "weekdays"
+                weekList.className = "weekdays";
                 for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
 
                     let dayElement = document.createElement('li');
@@ -95,6 +107,13 @@ class Calendar {
 
     private getDaysInMonth(month, year) {
         return new Date(year, month+1, 0).getDate();
+    }
+
+    private parseDateFromTransaction(date : string) : Date {
+        let year = parseInt(date.substring(0,4));
+        let month = parseInt(date.substring(5,7));
+        let day = parseInt(date.substring(8,10));
+        return new Date(year, month-1, day);
     }
 }
 
