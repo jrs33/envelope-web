@@ -16,6 +16,8 @@ class AuthorizationDecorator {
     decorate() : XMLHttpRequest {
         
         if(process.env.NODE_ENV == 'development') {
+            this.request.withCredentials = true;
+            this.request.setRequestHeader("Authorization", "Bearer dummy");
             return this.request;
         }
 
