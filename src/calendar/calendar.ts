@@ -57,16 +57,15 @@ class Calendar {
         
         return await this.transactionFetcher.getTransactionsPromise()
             .then(transactions => {
-                debugger;
                 let transactionList = JSON.parse(transactions);
-                let thisMonthsTransactions = new Map();
+                let thisMonthsTransactions = new Map<number, Array<any>>();
                 for(let i = 0; i < transactionList.length; i++) {
                     let transactDate = this.parseDateFromTransaction(transactionList[i].date);
                     if(transactDate.getMonth() == currentMonth) {
-                        if(thisMonthsTransactions.has(transactDate.getDay())) {
-                            thisMonthsTransactions.get(transactDate.getDay()).push(transactionList[i]);
+                        if(thisMonthsTransactions.has(transactDate.getDate())) {
+                            thisMonthsTransactions.get(transactDate.getDate()).push(transactionList[i]);
                         } else {
-                            thisMonthsTransactions.set(transactDate.getDay(), [transactionList[i]]);
+                            thisMonthsTransactions.set(transactDate.getDate(), [transactionList[i]]);
                         }
                     }
                 }
@@ -79,7 +78,13 @@ class Calendar {
                 for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
 
                     let dayElement = document.createElement('li');
-                    dayElement.textContent = i.toString();
+
+                    if(thisMonthsTransactions.has(i)) {
+                        let dayTotal = this.sumTransactionTotal(thisMonthsTransactions.get(i));
+                        dayElement.textContent = i.toString() + " $" + dayTotal;
+                    } else {
+                        dayElement.textContent = i.toString() + " $0";
+                    }
 
                     weekList.appendChild(dayElement);
                     currDayCount = currDayCount + 1;
@@ -114,6 +119,21 @@ class Calendar {
         let month = parseInt(date.substring(5,7));
         let day = parseInt(date.substring(8,10));
         return new Date(year, month-1, day);
+    }
+
+    private sumTransactionTotal(transactionList) : number { 
+
+        let runningTotal = 0;
+        for(let transaction of transactionList) {
+            if (transaction.transactionType == 'CREDIT') {
+                runningTotal = runningTotal + transaction.amount;
+            } else if (transaction.transactionType == 'DEBIT') {
+                runningTotal = runningTotal - transaction.amount;
+            } else { 
+                throw "unrecognized_transaction_type";
+            }
+        }
+        return runningTotal;
     }
 }
 
