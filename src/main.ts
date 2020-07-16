@@ -1,6 +1,5 @@
-import { Transactions } from './transactions/transactions'
-import { Envelopes } from './envelopes/envelopes';
-import { Dashboard } from './dashboard/dashboard';
+import { Configuration } from './composites/configuration';
+import { Dashboard } from './composites/dashboard';
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
 
@@ -11,9 +10,7 @@ const app = async () => {
 
     if (process.env.NODE_ENV == 'development') { 
         console.log('running_in_dev_env');
-        // register route handlers, and display envelopes by default
-        let transactionConnector = new Transactions();
-        let envelopeConnector = new Envelopes();
+        let configurationConnector = new Configuration();
         let dashboardConnector = new Dashboard();
         let logout = new Logout();
         dashboardConnector.connect();
@@ -28,9 +25,7 @@ const app = async () => {
                 AUTH.authorize();
             }
     
-            // register route handlers, and display envelopes by default
-            let transactionConnector = new Transactions();
-            let envelopeConnector = new Envelopes();
+            let configurationConnector = new Configuration();
             let dashboardConnector = new Dashboard();
             let logout = new Logout();
             dashboardConnector.connect();

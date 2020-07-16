@@ -24,9 +24,7 @@ export class Router {
     }
 
     getRoute() {
-        console.log('raw_route:' + window.location.hash);
         let route = window.location.hash.substr(1).replace(/\//ig, "/");
-        console.log('route change:' + route);
         return route;
     }
 }
