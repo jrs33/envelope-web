@@ -28,27 +28,44 @@ class Transactions {
 
     async connect() {
 
-        let contentDiv = document.getElementById('main');
+        let contentDiv = document.getElementById('container');
         contentDiv.innerHTML = '';
+
+        let headerDiv = document.createElement('div');
+        headerDiv.className = "row";
+        let headerCol = document.createElement('div');
+        headerCol.className = "col-12";
+        let header = document.createElement('h1');
+        header.textContent = "Transactions";
+        headerCol.appendChild(header);
+        headerDiv.appendChild(headerCol);
+        contentDiv.appendChild(headerDiv);
+
+        let transactionDiv = document.createElement('div');
+        transactionDiv.className = "row";
+        let transactionCol = document.createElement('div');
+        transactionCol.className = "col-4";
+        transactionDiv.appendChild(transactionCol);
+        contentDiv.appendChild(transactionDiv);
     
         let formHeader = document.createElement('h2');
         formHeader.textContent = 'Record Transaction';
         let createTransactionForm = this._transactionCreator.renderCreateTransactionForm();
         createTransactionForm.id = 'createTransactionForm';
-        contentDiv.appendChild(formHeader);
-        contentDiv.appendChild(createTransactionForm);
+        transactionCol.appendChild(formHeader);
+        transactionCol.appendChild(createTransactionForm);
 
         let divider = document.createElement('hr');
         let transactionTableHeader = document.createElement('h2');
         transactionTableHeader.textContent = 'Transaction History';
-        contentDiv.appendChild(divider);
-        contentDiv.appendChild(transactionTableHeader);
+        transactionCol.appendChild(divider);
+        transactionCol.appendChild(transactionTableHeader);
 
         this._transactionFetcher.getTransactions(
             transactionJson => {
                 let table = this._transactionFetcher.parseTransactions(transactionJson);
                 table.id = 'transactionTable';
-                contentDiv.appendChild(table);
+                transactionCol.appendChild(table);
             }
         );
 
@@ -60,7 +77,7 @@ class Transactions {
                     transactionJson => {
                         let table = this._transactionFetcher.parseTransactions(transactionJson);
                         table.id = 'transactionTable';
-                        contentDiv.appendChild(table);
+                        transactionCol.appendChild(table);
                     }
                 );
             });
