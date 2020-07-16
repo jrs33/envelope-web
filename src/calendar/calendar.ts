@@ -50,12 +50,12 @@ class Calendar {
         return weekDiv;
     }
 
-    async getDayList() : Promise<Array<HTMLUListElement>> {
+    getDayList() : Promise<Array<HTMLUListElement>> {
 
         let currentDate = new Date();
         let currentMonth = currentDate.getMonth();
         
-        return await this.transactionFetcher.getTransactionsPromise()
+        return this.transactionFetcher.getTransactionsPromise()
             .then(transactions => {
                 let transactionList = JSON.parse(transactions);
                 let thisMonthsTransactions = new Map<number, Array<any>>();

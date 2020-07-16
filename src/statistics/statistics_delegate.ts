@@ -6,9 +6,9 @@ class StatisticDelegate {
 
 	constructor() {}
 
-	async getRemaining() : Promise<number> {
+	getRemaining() : Promise<number> {
 
-		return await new Promise(function (resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			var rawXmlHttpRequest = new XMLHttpRequest();
 			rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/envelope/statistics/remaining')
 			var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
