@@ -1,11 +1,13 @@
 import { Calendar } from '../calendar/calendar';
 import { Router } from '../routing/router';
+import { StatisticDelegate } from '../statistics/statistics_delegate';
 
 class Dashboard {
 
     static readonly ROUTE_TO_ACTION = 'dashboard';
 
     calendar : Calendar;
+    statistics: StatisticDelegate;
 
     router: Router;
     route: String;
@@ -13,6 +15,7 @@ class Dashboard {
     constructor() {
 
         this.calendar = new Calendar();
+        this.statistics = new StatisticDelegate();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -29,6 +32,18 @@ class Dashboard {
 
         let mainDiv = document.getElementById("container");
         mainDiv.innerHTML = '';
+
+        let remainingThisMonth = await this.statistics.getRemaining();
+        let remainingDiv = document.createElement('div');
+        remainingDiv.className = "row";
+        let remainingCol = document.createElement('div');
+        remainingCol.className = "col-12";
+        let remainingSpan = document.createElement('h1');
+        remainingSpan.textContent = "$" + remainingThisMonth + " remaining this month";
+        remainingCol.appendChild(remainingSpan);
+        remainingDiv.appendChild(remainingCol);
+
+        mainDiv.appendChild(remainingDiv);
 
         let calendarDiv = document.createElement('div');
         mainDiv.appendChild(calendarDiv);
