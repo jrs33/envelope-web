@@ -20,6 +20,24 @@ class TransactionCreator {
 		var createTransactionForm = document.createElement('form');
 		createTransactionForm.id = "transactionForm";
 
+		// transaction date input
+		var transactionDateFormGroup = document.createElement('div');
+		transactionDateFormGroup.id = "transactionDateFormGroup";
+		transactionDateFormGroup.className = "form-group";
+		createTransactionForm.appendChild(transactionDateFormGroup);
+
+		var createTransactionDate = document.createElement('input');
+		createTransactionDate.id = "transactionDateInput";
+		createTransactionDate.name = "date";
+		createTransactionDate.className = "form-control";
+
+		var createTransactionDateLabel = document.createElement('label');
+		createTransactionDateLabel.setAttribute("for", createTransactionDate.id);
+		createTransactionDateLabel.textContent = "Date (YYYY-MM-DD)";
+
+		transactionDateFormGroup.appendChild(createTransactionDateLabel);
+		transactionDateFormGroup.appendChild(createTransactionDate);
+
 		// transaction name input
 		var transactionNameFormGroup = document.createElement('div');
 		transactionNameFormGroup.id = "transactionNameFormGroup";
@@ -171,6 +189,7 @@ class TransactionCreator {
 		let transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
 		let transactionType = transaction.target["transactionType"].value;
 		let transactionSourceId = parseInt(transaction.target["transactionFormSourceSelect"].value, 10);
+		let transactionDate = transaction.target["date"].value;
 
 		var rawXmlHttpRequest = new XMLHttpRequest();
 		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create');
@@ -186,7 +205,8 @@ class TransactionCreator {
 			amount: transactionAmount,
 			envelopeId: transactionEnvelopeId,
 			transactionType: transactionType,
-			sourceId: transactionSourceId
+			sourceId: transactionSourceId,
+			date: transactionDate
 		}));
 	}
 }
