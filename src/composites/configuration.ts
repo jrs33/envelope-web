@@ -1,5 +1,6 @@
 import { Transactions } from '../transactions/transactions';
 import { Envelopes } from '../envelopes/envelopes';
+import { SourceForm } from '../sources/source_form';
 import { Router } from '../routing/router';
 
 class Configuration {
@@ -11,11 +12,13 @@ class Configuration {
 
     transactions: Transactions;
     envelopes: Envelopes;
+    sourceForm: SourceForm;
 
     constructor() {
 
         this.transactions = new Transactions();
         this.envelopes = new Envelopes();
+        this.sourceForm = new SourceForm();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -64,6 +67,14 @@ class Configuration {
 
         let envelopeFormDiv = this.envelopes.getEnvelopeForm();
         envelopeCol.appendChild(envelopeFormDiv);
+
+        // create source form
+        let sourceCol = document.createElement('div');
+        sourceCol.className = "col-4";
+        transactionDiv.appendChild(sourceCol);
+
+        let sourceFormDiv = this.sourceForm.get();
+        sourceCol.appendChild(sourceFormDiv);
     }
 }
 

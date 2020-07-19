@@ -1,4 +1,5 @@
 import { EnvelopeFetcher } from '../envelopes/envelope_get';
+import { SourceFetcher } from '../sources/source_get';
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
@@ -6,10 +7,12 @@ const CONFIG = require('../../config.local.json');
 class TransactionCreator {
 
 	_envelopeFetcher : EnvelopeFetcher;
+	_sourceFetcher: SourceFetcher;
 
 	constructor() {
 
 		this._envelopeFetcher = new EnvelopeFetcher();
+		this._sourceFetcher = new SourceFetcher();
 	}
 
 	renderCreateTransactionForm() : HTMLFormElement {
@@ -74,6 +77,29 @@ class TransactionCreator {
 		transactionEnvelopeFormGroup.appendChild(createTransactionEnvelopeLabel);
 		transactionEnvelopeFormGroup.appendChild(selectEnvelopeElement);
 
+		// transaction source select
+		var transactionSourceFormGroup = document.createElement('div');
+		transactionSourceFormGroup.id = "transactionSourceFormGroup";
+		transactionSourceFormGroup.className = "form-group";
+		createTransactionForm.appendChild(transactionSourceFormGroup);
+
+		var selectSourceElement = document.createElement('select');
+		selectSourceElement.id = "transactionFormSourceSelect";
+		selectSourceElement.name = "id";
+		selectSourceElement.className = "form-control";
+		this._sourceFetcher.getSources()
+			.then(sourceJson => {
+				this.renderCreateTransactionSources(selectSourceElement, sourceJson);
+			})
+			.catch(err => console.log("source_fetch_error: " + err));
+
+		var createTransactionSourceLabel = document.createElement('label');
+		createTransactionSourceLabel.setAttribute("for", selectSourceElement.id);
+		createTransactionSourceLabel.textContent = "Source";
+
+		transactionSourceFormGroup.appendChild(createTransactionSourceLabel);
+		transactionSourceFormGroup.appendChild(selectSourceElement);
+
 		// transaction type select
 		var transactionTypeFormGroup = document.createElement('div');
 		transactionTypeFormGroup.id = "transactionTypeFormGroup";
@@ -120,6 +146,18 @@ class TransactionCreator {
 		}
 	}
 
+	renderCreateTransactionSources(selectEnvelopeElement, responseText) {
+		let response = JSON.parse(responseText);
+
+		for(const source of response) {
+
+			var option = document.createElement('option');
+			option.textContent = source.name;
+			option.value = source.id;
+			selectEnvelopeElement.appendChild(option);
+		}
+	}
+
 	getTransactionTypes() {
 		return ["CREDIT", "DEBIT"];
 	}
@@ -128,10 +166,11 @@ class TransactionCreator {
 		transaction.preventDefault();
 
 		console.log(transaction.target);
-		const transactionName = transaction.target["name"].value;
-		const transactionAmount = transaction.target["amount"].value;
-		const transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
-		const transactionType = transaction.target["transactionType"].value;
+		let transactionName = transaction.target["name"].value;
+		let transactionAmount = transaction.target["amount"].value;
+		let transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
+		let transactionType = transaction.target["transactionType"].value;
+		let transactionSourceId = parseInt(transaction.target["transactionFormSourceSelect"].value, 10);
 
 		var rawXmlHttpRequest = new XMLHttpRequest();
 		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create');
@@ -146,7 +185,8 @@ class TransactionCreator {
 			transactionName: transactionName,
 			amount: transactionAmount,
 			envelopeId: transactionEnvelopeId,
-			transactionType: transactionType
+			transactionType: transactionType,
+			sourceId: transactionSourceId
 		}));
 	}
 }
