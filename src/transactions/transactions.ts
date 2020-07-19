@@ -26,6 +26,7 @@ class Transactions {
         createTransactionForm.addEventListener('submit', event => {
             this._transactionCreator.createTransaction(event, () => {
                 //TODO: send a confirmation alert here
+                createTransactionForm.reset();
             });
         });
 

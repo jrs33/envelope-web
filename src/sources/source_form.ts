@@ -12,15 +12,16 @@ class SourceForm {
     
         let formHeader = document.createElement('h2');
         formHeader.textContent = 'Source';
-        let createsourceForm = this.renderForm();
-        createsourceForm.id = 'createSourceForm';
+        let createSourceForm = this.renderForm();
+        createSourceForm.id = 'createSourceForm';
         sourceCol.appendChild(formHeader);
-        sourceCol.appendChild(createsourceForm);
+        sourceCol.appendChild(createSourceForm);
 
-        createsourceForm.addEventListener('submit', event => {
+        createSourceForm.addEventListener('submit', event => {
             this.createSource(event, () => {
                 // TODO: confirmation
-            })
+            });
+            createSourceForm.reset();
         });
 
         return sourceCol;

@@ -27,6 +27,7 @@ class Envelopes {
             this._envelopeCreator.createEnvelope(event, () => {
                 //TODO add confirmation notif
             });
+            createEnvelopeForm.reset();
         });
 
         return envelopeCol;
