@@ -7,11 +7,11 @@ class Calendar {
     "July", "August", "September", "October", "November", "December"
   ];
 
-    transactionFetcher: TransactionFetcher;
+    private _transactionFetcher: TransactionFetcher;
 
     constructor() {
 
-        this.transactionFetcher = new TransactionFetcher();
+        this._transactionFetcher = new TransactionFetcher();
     }
 
     getMonthHeader() : HTMLDivElement {
@@ -55,7 +55,7 @@ class Calendar {
         let currentDate = new Date();
         let currentMonth = currentDate.getMonth();
         
-        return this.transactionFetcher.getTransactionsPromise()
+        return this._transactionFetcher.getTransactionsPromise()
             .then(transactions => {
                 let transactionList = JSON.parse(transactions);
                 let thisMonthsTransactions = new Map<number, Array<any>>();
@@ -75,22 +75,34 @@ class Calendar {
                 let currDayCount = 0;
                 let weekList : HTMLUListElement = document.createElement('ul');
                 weekList.className = "weekdays";
-                for(let i = 1; i <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); i++) {
+                for(let dayOfMonth: number = 1; dayOfMonth <= this.getDaysInMonth(currentMonth, currentDate.getFullYear()); dayOfMonth++) {
 
                     let dayElement = document.createElement('li');
+                    dayElement.id = dayOfMonth.toString();
 
-                    if(thisMonthsTransactions.has(i)) {
-                        let dayTotal = this.sumTransactionTotal(thisMonthsTransactions.get(i));
-                        dayElement.textContent = i.toString() + " $" + dayTotal;
+                    if(thisMonthsTransactions.has(dayOfMonth)) {
+                        let dayTotal = this.sumTransactionTotal(thisMonthsTransactions.get(dayOfMonth));
+                        dayElement.textContent = dayOfMonth.toString() + " $" + dayTotal;
                     } else {
-                        dayElement.textContent = i.toString() + " $0";
+                        dayElement.textContent = dayOfMonth.toString() + " $0";
                     }
 
                     weekList.appendChild(dayElement);
                     currDayCount = currDayCount + 1;
                     
                     if(currDayCount % 7 == 0) {
-                        let weekListCopy = this.deepCloneNode(weekList);
+                        let weekListCopy: HTMLUListElement = this.deepCloneNode(weekList);
+                        
+                        // need to attach here since there is no way to get event listeners from the DOM.
+                        // cloning would omit this handler
+                        let daysOfWeek = weekListCopy.getElementsByTagName("li");
+                        for(let weekdayIndex = 0; weekdayIndex < daysOfWeek.length; weekdayIndex++) {
+                            daysOfWeek[weekdayIndex].addEventListener("click", event => {
+                                debugger;
+                                console.log("clicked! " + thisMonthsTransactions.get(parseInt(daysOfWeek[weekdayIndex].id, 10)));
+                            });
+                        }
+
                         weeks.push(weekListCopy);
                         
                         weekList.innerHTML = '';
@@ -106,11 +118,11 @@ class Calendar {
             });
     }
 
-    private deepCloneNode<T extends Node>(node: T) {
+    private deepCloneNode<T extends Node>(node: T) : T {
         return <T>node.cloneNode(true);
     }
 
-    private getDaysInMonth(month, year) {
+    private getDaysInMonth(month, year) : number {
         return new Date(year, month+1, 0).getDate();
     }
 
