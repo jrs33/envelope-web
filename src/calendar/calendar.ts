@@ -3,9 +3,10 @@ import { TransactionFetcher } from '../transactions/transaction_get';
 
 class Calendar {
 
-    static readonly months = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+    private static readonly months = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+    
+    public static _calendarDayClickEventHook: HTMLDivElement = document.createElement('div');
 
     private _transactionFetcher: TransactionFetcher;
 
@@ -98,8 +99,9 @@ class Calendar {
                         let daysOfWeek = weekListCopy.getElementsByTagName("li");
                         for(let weekdayIndex = 0; weekdayIndex < daysOfWeek.length; weekdayIndex++) {
                             daysOfWeek[weekdayIndex].addEventListener("click", event => {
-                                debugger;
-                                console.log("clicked! " + thisMonthsTransactions.get(parseInt(daysOfWeek[weekdayIndex].id, 10)));
+                                let transactions: any[] = thisMonthsTransactions.get(parseInt(daysOfWeek[weekdayIndex].id, 10));
+                                let clickEvent = new CustomEvent("calendarDayClicked", { detail: transactions });
+                                Calendar._calendarDayClickEventHook.dispatchEvent(clickEvent);
                             });
                         }
 

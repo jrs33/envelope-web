@@ -1,4 +1,5 @@
 import { Calendar } from '../calendar/calendar';
+import { CalendarDetails } from '../calendar/calendar_details';
 import { Router } from '../routing/router';
 import { StatisticDelegate } from '../statistics/statistics_delegate';
 
@@ -7,6 +8,7 @@ class Dashboard {
     static readonly ROUTE_TO_ACTION = 'dashboard';
 
     calendar : Calendar;
+    calendarDetails: CalendarDetails;
     statistics: StatisticDelegate;
 
     router: Router;
@@ -15,6 +17,7 @@ class Dashboard {
     constructor() {
 
         this.calendar = new Calendar();
+        this.calendarDetails = new CalendarDetails();
         this.statistics = new StatisticDelegate();
 
         this.router = new Router();
@@ -55,7 +58,7 @@ class Dashboard {
         let monthRow = document.createElement('div');
         monthRow.className = "row";
         let monthCol = document.createElement('div');
-        monthCol.className = "col-7";
+        monthCol.className = "col-12";
 
         monthCol.appendChild(monthHeader);
         monthRow.appendChild(monthCol);
@@ -63,7 +66,7 @@ class Dashboard {
 
         let weekRow = document.createElement('div');
         weekRow.className = "row";
-        weekHeader.className = "col-7";
+        weekHeader.className = "col-12";
         weekRow.appendChild(weekHeader);
         calendarDiv.appendChild(weekRow);
 
@@ -73,12 +76,19 @@ class Dashboard {
 
             let listDiv = document.createElement('div');
             listDiv.appendChild(weekList);
-            listDiv.className = "col-7";
+            listDiv.className = "col-12";
 
             dateRow.appendChild(listDiv);
 
             calendarDiv.appendChild(dateRow);
         });
+
+        let detailsRow = document.createElement('div');
+        detailsRow.className = "row";
+        let calendarDetails = CalendarDetails._calendarDetails;
+        calendarDetails.className = "col-12";
+        detailsRow.appendChild(calendarDetails);
+        mainDiv.appendChild(detailsRow);
     }
 }
 
