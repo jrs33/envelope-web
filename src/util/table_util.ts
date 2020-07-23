@@ -1,4 +1,4 @@
-function createTableHeader(nameList) {
+function createTableHeader(nameList: Array<string>) : HTMLTableSectionElement {
 
 	var tableHead = document.createElement('thead');
 	var tableHeadRow = document.createElement('tr');
@@ -14,7 +14,7 @@ function createTableHeader(nameList) {
 	return tableHead;
 }
 
-function createTableBody(valueLists) {
+function createTableBody(valueLists: Array<any>): HTMLTableSectionElement {
 
 	var tableBody = document.createElement('tbody');
 	for(const valueList of valueLists) {

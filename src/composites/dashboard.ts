@@ -86,7 +86,7 @@ class Dashboard {
         let detailsRow = document.createElement('div');
         detailsRow.className = "row";
         let calendarDetails = CalendarDetails._calendarDetails;
-        calendarDetails.className = "col-12";
+        calendarDetails.className = "col-6";
         detailsRow.appendChild(calendarDetails);
         mainDiv.appendChild(detailsRow);
     }

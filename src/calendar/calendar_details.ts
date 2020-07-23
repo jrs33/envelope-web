@@ -1,4 +1,5 @@
 import { Calendar } from './calendar';
+import { createTableHeader, createTableBody } from '../util/table_util';
 
 class CalendarDetails {
 
@@ -11,16 +12,20 @@ class CalendarDetails {
             let transactionList = event.detail;
 
             CalendarDetails._calendarDetails.innerHTML = '';
-            let list: HTMLUListElement = document.createElement('ul');
+            let table: HTMLTableElement = document.createElement('table');
+            table.className = "table";
+            let tableHeader: HTMLTableSectionElement = createTableHeader(['Date', 'Name', 'Amount', 'Type']);
+            table.appendChild(tableHeader);
+
+            let values = [];
             if(Array.isArray(transactionList)) {
                 for(let i = 0; i < transactionList.length; i++) {
                     let transaction = transactionList[i];
-                    let listElement = document.createElement('li');
-                    listElement.textContent = transaction.date + " " + transaction.transactionName + " " + transaction.amount + " " + transaction.transactionType;
-                    list.appendChild(listElement);
+                    values.push([transaction.date, transaction.transactionName, transaction.amount, transaction.transactionType]);
                 }
+                table.appendChild(createTableBody(values));
             }
-            CalendarDetails._calendarDetails.appendChild(list);
+            CalendarDetails._calendarDetails.appendChild(table);
         });
     }
 }
