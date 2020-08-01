@@ -13,7 +13,7 @@ const app = async () => {
         let configurationConnector = new Configuration();
         let dashboardConnector = new Dashboard();
         let logout = new Logout();
-        dashboardConnector.connect();
+        // dashboardConnector.connect();
     } else {
         AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
             debugger;
@@ -28,7 +28,7 @@ const app = async () => {
             let configurationConnector = new Configuration();
             let dashboardConnector = new Dashboard();
             let logout = new Logout();
-            dashboardConnector.connect();
+            // dashboardConnector.connect();
         });
     }
 }

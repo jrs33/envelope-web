@@ -8,7 +8,7 @@
 		<title>Envelopes</title>
 	</head>
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px;">
 			<a class="navbar-brand" href="#dashboard">MoneyMe</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -16,23 +16,76 @@
 		
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
+					<li id="dashboard-nav" class="nav-item active">
 						<a class="nav-link" href="#dashboard">Dashboard <span class="sr-only">(current)</span></a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#transactions">Transactions</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#goals">Goals</a>
-					</li>
-					<li class="nav-item">
+					<li id="logout-nav" class="nav-item">
 						<a class="nav-link" href="#logout">Logout</a>
 					</li>
 				</ul>
 			</div>
 		</nav>
 		<div id="container" class="container-fluid">
-		</div>
+			<h1>Dashboard</h1>
+			<div class="row">
+				<div class="col-5">
+					<div class="jumbotron">
+						<h1 id="remaining-amount" class="display-4">$0.00</h1>
+						<p class="lead">Remaining this month</p>
+					</div>
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a id="transaction-form-sublink" class="nav-link active">+ Transaction</a>
+						</li>
+						<li class="nav-item">
+							<a id="category-form-sublink" class="nav-link">+ Category</a>
+						</li>
+						<li class="nav-item">
+							<a id="source-form-sublink" class="nav-link">+ Source</a>
+						</li>
+					</ul>
+					<div class="tab-content" id="myTabContent">
+						<div id="transaction-form-content" class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">...</div>
+						<div id="category-form-content" class="tab-pane fade" role="tabpanel" aria-labelledby="profile-tab">...</div>
+						<div id="source-form-content" class="tab-pane fade" role="tabpanel" aria-labelledby="contact-tab">...</div>
+					</div>
+				</div>
+				<div class="col-7">
+					<div>
+						<div id="month-indicator" class="month-indicator">
+							<time datetime="2019-02"> <h2>February 2019</h2> </time>
+						</div>
+						<div class="day-of-week">
+							<div>Sunday</div>
+							<div>Monday</div>
+							<div>Tuesday</div>
+							<div>Wednesday</div>
+							<div>Thursday</div>
+							<div>Friday</div>
+							<div>Saturday</div>
+						</div>
+						<div id="date-grid" class="date-grid">
+							<div>
+								<span><time datetime="2019-02-01">1</time></span>
+								<h4 style="text-align: center; padding: 20px;">$5.00</h4>
+							</div>
+							<div>
+								<span><time datetime="2019-02-02">2</time></span>
+								<h4 style="text-align: center; padding: 20px;">$5.00</h4>
+							</div>
+							<div>
+								<span><time datetime="2019-02-03">3</time></span>
+								<h4 style="text-align: center; padding: 20px;">$5.00</h4>
+							</div>
+						</div>
+					</div>
+					<table id="calendar-details" class="table table-striped">
+						<thead>
+							<tr><th scope="col">Date</th><th scope="col">Name</th><th scope="col">Amount</th><th scope="col">Type</th></tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		<script type="module" src="main.js"></script>
 	</body>
 </html>

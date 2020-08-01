@@ -1,79 +1,38 @@
-ul {list-style-type: none;}
-body {font-family: Verdana, sans-serif;}
+.month-indicator {
+    text-align: center;
+    padding:10px;
+    margin: 10px;
+}
 
-/* Month header */
-.month {
-    padding: 70px 25px;
-    width: 100%;
-    background: #007bff;
+.day-of-week,
+.date-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    padding:10px;
+    margin: 10px;
+    grid-gap: 0px;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+}
+
+.day-of-week {
+    margin-top: 1.25em;
+}
+
+.day-of-week > *  {
     text-align: center;
 }
 
-/* Month list */
-.month ul {
-    margin: 0;
-    padding: 0;
+/* Dates */
+.date-grid {
+    margin-top: 0.5em;
 }
 
-.month ul li {
-    color: white;
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+/* Positioning the first day */
+.date-grid div:first-child {
+    grid-column: 6;
 }
 
-/* Previous button inside month header */
-.month .prev {
-    float: left;
-    padding-top: 10px;
-}
-
-/* Next button */
-.month .next {
-    float: right;
-    padding-top: 10px;
-}
-
-/* Weekdays (Mon-Sun) */
-.weekdays {
-    margin: 0;
-    padding: 10px 10px;
-    background-color:#ddd;
-}
-
-.weekdays li {
-    display: inline-block;
-    width: 13.6%;
-    color: #666;
-    text-align: center;
-}
-
-.days {
-    padding: 10px 10px;
-    background: #eee;
-}
-  
-.days li {
-    list-style-type: none;
-    display: inline-block;
-    width: 13.6%;
-    vertical-align: top;
-    text-align: center;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    font-size:12px;
-    color: #777;
-    background-color: white;
-    margin: 5px;
-}
-
-.days li .active {
-    padding: 5px;
-    background: #007bff;
-    color: white !important
-}
-
-.days li .amount {
-    margin: 20px;
-    color: red;
+.date-grid div span {
+    padding: 4px;
 }

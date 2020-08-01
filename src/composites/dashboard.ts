@@ -5,7 +5,7 @@ import { StatisticDelegate } from '../statistics/statistics_delegate';
 
 class Dashboard {
 
-    static readonly ROUTE_TO_ACTION = 'dashboard';
+    static readonly ROUTE_TO_ACTION = 'dashboardWAIT';
 
     calendar : Calendar;
     calendarDetails: CalendarDetails;
@@ -34,13 +34,12 @@ class Dashboard {
     async connect() {
 
         let mainDiv = document.getElementById("container");
-        mainDiv.innerHTML = '';
 
         let remainingThisMonth = await this.statistics.getRemaining();
         let remainingDiv = document.createElement('div');
         remainingDiv.className = "row";
         let remainingCol = document.createElement('div');
-        remainingCol.className = "col-12";
+        remainingCol.className = "col-5";
         let remainingSpan = document.createElement('h1');
         remainingSpan.textContent = "$" + remainingThisMonth + " remaining this month";
         remainingCol.appendChild(remainingSpan);
@@ -58,7 +57,7 @@ class Dashboard {
         let monthRow = document.createElement('div');
         monthRow.className = "row";
         let monthCol = document.createElement('div');
-        monthCol.className = "col-12";
+        monthCol.className = "col-7";
 
         monthCol.appendChild(monthHeader);
         monthRow.appendChild(monthCol);
@@ -66,7 +65,7 @@ class Dashboard {
 
         let weekRow = document.createElement('div');
         weekRow.className = "row";
-        weekHeader.className = "col-12";
+        weekHeader.className = "col-7";
         weekRow.appendChild(weekHeader);
         calendarDiv.appendChild(weekRow);
 
@@ -76,7 +75,7 @@ class Dashboard {
 
             let listDiv = document.createElement('div');
             listDiv.appendChild(weekList);
-            listDiv.className = "col-12";
+            listDiv.className = "col-7";
 
             dateRow.appendChild(listDiv);
 
@@ -86,7 +85,7 @@ class Dashboard {
         let detailsRow = document.createElement('div');
         detailsRow.className = "row";
         let calendarDetails = CalendarDetails._calendarDetails;
-        calendarDetails.className = "col-6";
+        calendarDetails.className = "col-7";
         detailsRow.appendChild(calendarDetails);
         mainDiv.appendChild(detailsRow);
     }
