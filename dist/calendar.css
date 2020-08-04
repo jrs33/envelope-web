@@ -7,30 +7,30 @@
 .day-of-week,
 .date-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); 
-    padding:10px;
-    margin: 10px;
+    grid-template-columns: repeat(7, 1fr);
     grid-gap: 0px;
     border: 1px solid #dfdfdf;
     border-radius: 5px;
 }
 
-.day-of-week {
+/* .day-of-week {
     margin-top: 1.25em;
-}
+} */
 
-.day-of-week > *  {
+.day-of-week {
     text-align: center;
 }
 
-/* Dates */
-.date-grid {
-    margin-top: 0.5em;
+.day-of-week .day-of-week-item {
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
 }
 
-/* Positioning the first day */
-.date-grid div:first-child {
-    grid-column: 6;
+/* Dates */
+
+.date-grid .date-grid-item {
+    border: 1px solid lightgray;
 }
 
 .date-grid div span {
