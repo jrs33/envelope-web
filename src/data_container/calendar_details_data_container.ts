@@ -1,5 +1,5 @@
 import { DataContainer } from './data_container';
-import { CentralMediator } from '../mediator/mediator';
+import { Actions } from '../mediator/mediator';
 
 interface CalendarDetailsState {
     readonly transactions: Array<Transaction>;
@@ -14,24 +14,28 @@ interface Transaction {
     readonly amount: number;
 }
 
-class CalendarDetailsDataContainer implements DataContainer<CalendarDetailsState> {
+class CalendarDetailsDataContainer extends DataContainer<CalendarDetailsState> {
+
+    private static instance: CalendarDetailsDataContainer;
 
     state: CalendarDetailsState;
-    observer: CentralMediator;
 
-    constructor() {
+    private constructor() {
 
-        this.state = {transactions: []};
-        this.observer = new CentralMediator();
+        super({transactions: []});
     }
 
-    getState(): CalendarDetailsState {
-        return this.state;
+    static getInstance(): CalendarDetailsDataContainer {
+        if (!CalendarDetailsDataContainer.instance) {
+            CalendarDetailsDataContainer.instance = new CalendarDetailsDataContainer();
+        }
+
+        return CalendarDetailsDataContainer.instance;
     }
 
-    setState(state: CalendarDetailsState): void {
-        this.state = state;
+    getAction(): Actions {
+        return Actions.UPDATE_CALENDAR_DETAILS;
     }
 }
 
-export { CalendarDetailsDataContainer, CalendarDetailsState };
+export { CalendarDetailsDataContainer, CalendarDetailsState, Transaction };

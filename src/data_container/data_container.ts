@@ -1,12 +1,23 @@
-import { CentralMediator } from '../mediator/mediator';
+import { CentralMediator, Actions } from '../mediator/mediator';
 
-interface DataContainer<T> {
+abstract class DataContainer<T> {
 
     state: T;
-    observer: CentralMediator;
 
-    getState(): T;
-    setState(newState: T): void;
+    constructor(state: T) {
+        this.state = state;
+    }
+
+    abstract getAction(): Actions;
+
+    getState(): T {
+        return this.state;
+    }
+
+    setState(newState: T): void {
+        this.state = newState;
+        CentralMediator.getInstance().dispatch(this.getAction());
+    }
 }
 
 export { DataContainer };

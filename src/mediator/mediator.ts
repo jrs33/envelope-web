@@ -10,20 +10,30 @@ enum Actions {
 
 class CentralMediator {
 
+    private static instance: CentralMediator;
+
     // data containers
-    calendarDetailsDataContainer: DataContainer<CalendarDetailsState>;
+    private calendarDetailsDataContainer: DataContainer<CalendarDetailsState>;
 
     // view handlers
-    calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
+    private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
 
-    constructor() {
+    private constructor() {
 
-        this.calendarDetailsDataContainer = new CalendarDetailsDataContainer();
+        this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
 
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
     }
 
-    update(action: Actions) {
+    static getInstance(): CentralMediator {
+        if(!CentralMediator.instance) {
+            CentralMediator.instance = new CentralMediator();
+        }
+
+        return CentralMediator.instance;
+    }
+
+    dispatch(action: Actions) {
 
         switch (action) {
             case Actions.UPDATE_CALENDAR_DETAILS: {
@@ -36,4 +46,4 @@ class CentralMediator {
     }
 }
 
-export { CentralMediator };
+export { CentralMediator, Actions };
