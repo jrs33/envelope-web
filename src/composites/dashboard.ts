@@ -3,9 +3,10 @@ import { CalendarDetails } from '../calendar/calendar_details';
 import { Router } from '../routing/router';
 import { StatisticDelegate } from '../statistics/statistics_delegate';
 
-import { CalendarDetailsDataContainer, Transaction } from '../data_container/calendar_details_data_container';
+import { CalendarDetailsDataContainer, Transaction, CalendarDetailsState } from '../data_container/calendar_details_data_container';
 import { CalendarDetailsDescriptionDataContainer } from '../data_container/calendar_details_description_container';
 import { RemainingDataContainer } from '../data_container/remaining_data_container';
+import { CategoryDataContainer, Category, CategoryState } from '../data_container/category_data_container';
 
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 
@@ -19,12 +20,13 @@ class Dashboard {
     calendarDetails: CalendarDetails;
     statistics: StatisticDelegate;
 
-    calendarDetailsDataContainer: CalendarDetailsDataContainer;
-    calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
-    remainingDataContainer: RemainingDataContainer;
+    private calendarDetailsDataContainer: CalendarDetailsDataContainer;
+    private calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
+    private remainingDataContainer: RemainingDataContainer;
+    private categoryDataContainer: CategoryDataContainer;
 
-    router: Router;
-    route: String;
+    private router: Router;
+    private route: String;
 
     constructor() {
 
@@ -35,6 +37,7 @@ class Dashboard {
         this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
         this.remainingDataContainer = RemainingDataContainer.getInstance();
+        this.categoryDataContainer = CategoryDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -62,12 +65,13 @@ class Dashboard {
         // let calendarDetailsBody: HTMLElement = document.getElementById('calendar-details-body');
 
         // initialize the html element state
-        this.calendarDetailsDataContainer.setState({transactions: await this.getTransactionsPromise()});
+        this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise());
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
-        this.remainingDataContainer.setState({value: await this.getRemaining()})
+        this.remainingDataContainer.setState({value: await this.getRemaining()});
+        this.categoryDataContainer.setState(await this.getCategories());
     }
 
-    private getTransactionsPromise() : Promise<Array<Transaction>> {
+    private getTransactionsPromise(): Promise<CalendarDetailsState> {
         
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
@@ -78,7 +82,6 @@ class Dashboard {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
                     if(xhr.status == 200) {
-                        debugger;
                         let transactionRawJson: Array<any> = JSON.parse(xhr.response);
                         let convertedTransaction: Array<Transaction> = [];
                         for(let rawTransaction of transactionRawJson) {
@@ -97,7 +100,7 @@ class Dashboard {
                                 amount: parseFloat(rawTransaction.amount)
                             })
                         }
-                        resolve(convertedTransaction);
+                        resolve({transactions: convertedTransaction});
                     } else {
                         console.log("transaction_fetch_error: " + xhr.status);
                         reject([]);
@@ -111,7 +114,7 @@ class Dashboard {
         });
     }
 
-    private getRemaining() : Promise<string> {
+    private getRemaining(): Promise<string> {
         
         return new Promise(function (resolve, reject) {
 			var rawXmlHttpRequest = new XMLHttpRequest();
@@ -124,12 +127,45 @@ class Dashboard {
                         let remaining = "$" + parseFloat(xhr.response).toFixed(2);
 						resolve(remaining);
 					} else {
-						reject(xhr.status);
+                        console.log("remaining_fetch_error: " + xhr.status);
+						reject("ERROR");
 					}
 				}
 			};
 			xhr.send();
 		});
+    }
+
+    private getCategories(): Promise<CategoryState> {
+        return new Promise(function (resolve, reject) {
+            var rawXmlRequest = new XMLHttpRequest();
+            rawXmlRequest.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
+
+            var xhr = new AuthorizationDecorator(rawXmlRequest).decorate();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let categoryRawJson: Array<any> = JSON.parse(xhr.response);
+                        let convertedCategories: Array<Category> = [];
+                        for(let rawCategory of categoryRawJson) {
+                            convertedCategories.push({
+                                id: parseInt(rawCategory.id),
+                                userId: rawCategory.userId,
+                                name: rawCategory.name,
+                                envelopeType: rawCategory.envelopeType,
+                                allocatedMoney: parseFloat(rawCategory.allocatedMoney),
+                                spentMoney: parseFloat(rawCategory.spentMoney)
+                            });
+                        }
+                        resolve({categories: convertedCategories});
+                    } else {
+                        console.log("category_fetch_error: " + xhr.status);
+						reject({categories: []});
+                    }
+                }
+            };
+            xhr.send();
+        });
     }
 }
 

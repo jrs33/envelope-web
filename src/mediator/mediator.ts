@@ -3,6 +3,7 @@ import { DataContainer } from '../data_container/data_container';
 import { CalendarDetailsDataContainer, CalendarDetailsState } from '../data_container/calendar_details_data_container';
 import { CalendarDetailsDescriptionDataContainer, CalendarDetailsDescriptionState } from '../data_container/calendar_details_description_container';
 import { RemainingDataContainer, RemainingState } from '../data_container/remaining_data_container';
+import { CategoryDataContainer, CategoryState } from '../data_container/category_data_container';
 
 import { ViewHandler } from '../view_handler/view_handler';
 import { CalendarDetailsViewHandler } from '../view_handler/calendar_details_view_handler';
@@ -19,6 +20,7 @@ class CentralMediator {
     private calendarDetailsDataContainer: DataContainer<CalendarDetailsState>;
     private calendarDetailsDescriptionDataContainer: DataContainer<CalendarDetailsDescriptionState>;
     private remainingDataContainer: DataContainer<RemainingState>;
+    private categoryDataContainer: DataContainer<CategoryState>;
 
     // view handlers
     private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
@@ -30,6 +32,7 @@ class CentralMediator {
         this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
         this.remainingDataContainer = RemainingDataContainer.getInstance();
+        this.categoryDataContainer = CategoryDataContainer.getInstance();
 
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
         this.calendarDetailsDescriptionViewHandler = new CalendarDetailsDescriptionViewHandler();
@@ -55,6 +58,11 @@ class CentralMediator {
             }
             case Actions.UPDATE_REMAINING: {
                 return this.remainingViewHandler.handle(this.remainingDataContainer.getState());
+            }
+            case Actions.UPDATE_CATEGORIES: {
+                debugger;
+                console.log('need to update forms: ' + this.categoryDataContainer.getState());
+                return true;
             }
             default: {
                 console.log("unrecognized_action: " + action);
