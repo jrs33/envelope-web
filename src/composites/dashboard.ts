@@ -5,6 +5,8 @@ import { StatisticDelegate } from '../statistics/statistics_delegate';
 
 import { CalendarDetailsDataContainer, Transaction } from '../data_container/calendar_details_data_container';
 import { CalendarDetailsDescriptionDataContainer } from '../data_container/calendar_details_description_container';
+import { RemainingDataContainer } from '../data_container/remaining_data_container';
+
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
@@ -19,6 +21,7 @@ class Dashboard {
 
     calendarDetailsDataContainer: CalendarDetailsDataContainer;
     calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
+    remainingDataContainer: RemainingDataContainer;
 
     router: Router;
     route: String;
@@ -31,6 +34,7 @@ class Dashboard {
 
         this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
+        this.remainingDataContainer = RemainingDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -46,7 +50,7 @@ class Dashboard {
     async connect() {
 
         // get reference to html elements that will be dispatching events to data containers
-        let remainingHeader: HTMLElement = document.getElementById('remaining-amount');
+        // let remainingHeader: HTMLElement = document.getElementById('remaining-amount');
         // TODO: form set up
         let transactionFormTabLink: HTMLElement = document.getElementById('transaction-form-sublink');
         let categoryFormTabLink: HTMLElement = document.getElementById('category-form-sublink');
@@ -60,9 +64,7 @@ class Dashboard {
         // initialize the html element state
         this.calendarDetailsDataContainer.setState({transactions: await this.getTransactionsPromise()});
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
-
-        // add event listeners to dispatch state changes to data containers
-        // which will update other UI components
+        this.remainingDataContainer.setState({value: await this.getRemaining()})
     }
 
     private getTransactionsPromise() : Promise<Array<Transaction>> {
@@ -107,6 +109,27 @@ class Dashboard {
             }
             xhr.send();
         });
+    }
+
+    private getRemaining() : Promise<string> {
+        
+        return new Promise(function (resolve, reject) {
+			var rawXmlHttpRequest = new XMLHttpRequest();
+			rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/envelope/statistics/remaining')
+			var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if (xhr.status == 200) {
+                        let remaining = "$" + parseFloat(xhr.response).toFixed(2);
+						resolve(remaining);
+					} else {
+						reject(xhr.status);
+					}
+				}
+			};
+			xhr.send();
+		});
     }
 }
 
