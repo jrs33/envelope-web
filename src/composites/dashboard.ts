@@ -3,13 +3,22 @@ import { CalendarDetails } from '../calendar/calendar_details';
 import { Router } from '../routing/router';
 import { StatisticDelegate } from '../statistics/statistics_delegate';
 
+import { CalendarDetailsDataContainer, Transaction } from '../data_container/calendar_details_data_container';
+import { CalendarDetailsDescriptionDataContainer } from '../data_container/calendar_details_description_container';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
+
+const CONFIG = require('../../config.local.json');
+
 class Dashboard {
 
-    static readonly ROUTE_TO_ACTION = 'dashboardWAIT';
+    static readonly ROUTE_TO_ACTION = 'dashboard';
 
     calendar : Calendar;
     calendarDetails: CalendarDetails;
     statistics: StatisticDelegate;
+
+    calendarDetailsDataContainer: CalendarDetailsDataContainer;
+    calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
 
     router: Router;
     route: String;
@@ -19,6 +28,9 @@ class Dashboard {
         this.calendar = new Calendar();
         this.calendarDetails = new CalendarDetails();
         this.statistics = new StatisticDelegate();
+
+        this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
+        this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -33,61 +45,68 @@ class Dashboard {
 
     async connect() {
 
-        let mainDiv = document.getElementById("container");
+        // get reference to html elements that will be dispatching events to data containers
+        let remainingHeader: HTMLElement = document.getElementById('remaining-amount');
+        // TODO: form set up
+        let transactionFormTabLink: HTMLElement = document.getElementById('transaction-form-sublink');
+        let categoryFormTabLink: HTMLElement = document.getElementById('category-form-sublink');
+        let sourceFormTabLink: HTMLElement = document.getElementById('source-form-sublink');
+        let formTabContent: HTMLElement = document.getElementById('my-tab-content');
+        let monthIndicator: HTMLElement = document.getElementById('month-indicator');
+        let dateGrid: HTMLElement = document.getElementById('date-grid');
+        // let transactionSelectDescription: HTMLElement = document.getElementById('transaction-select-description');
+        // let calendarDetailsBody: HTMLElement = document.getElementById('calendar-details-body');
 
-        let remainingThisMonth = await this.statistics.getRemaining();
-        let remainingDiv = document.createElement('div');
-        remainingDiv.className = "row";
-        let remainingCol = document.createElement('div');
-        remainingCol.className = "col-5";
-        let remainingSpan = document.createElement('h1');
-        remainingSpan.textContent = "$" + remainingThisMonth + " remaining this month";
-        remainingCol.appendChild(remainingSpan);
-        remainingDiv.appendChild(remainingCol);
+        // initialize the html element state
+        this.calendarDetailsDataContainer.setState({transactions: await this.getTransactionsPromise()});
+        this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
 
-        mainDiv.appendChild(remainingDiv);
+        // add event listeners to dispatch state changes to data containers
+        // which will update other UI components
+    }
 
-        let calendarDiv = document.createElement('div');
-        mainDiv.appendChild(calendarDiv);
-
-        let monthHeader : HTMLDivElement = this.calendar.getMonthHeader();
-        let weekHeader : HTMLDivElement = this.calendar.getWeekHeaders();
-        let dayList : Array<HTMLUListElement> = await this.calendar.getDayList();
-
-        let monthRow = document.createElement('div');
-        monthRow.className = "row";
-        let monthCol = document.createElement('div');
-        monthCol.className = "col-7";
-
-        monthCol.appendChild(monthHeader);
-        monthRow.appendChild(monthCol);
-        calendarDiv.appendChild(monthRow);
-
-        let weekRow = document.createElement('div');
-        weekRow.className = "row";
-        weekHeader.className = "col-7";
-        weekRow.appendChild(weekHeader);
-        calendarDiv.appendChild(weekRow);
-
-        dayList.forEach(weekList => {
-            let dateRow = document.createElement('div');
-            dateRow.className = "row";
-
-            let listDiv = document.createElement('div');
-            listDiv.appendChild(weekList);
-            listDiv.className = "col-7";
-
-            dateRow.appendChild(listDiv);
-
-            calendarDiv.appendChild(dateRow);
+    private getTransactionsPromise() : Promise<Array<Transaction>> {
+        
+        return new Promise(function (resolve, reject) {
+            var rawXmlHttpRequest = new XMLHttpRequest();
+            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
+            
+            var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+            xhr.timeout = 2000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if(xhr.status == 200) {
+                        debugger;
+                        let transactionRawJson: Array<any> = JSON.parse(xhr.response);
+                        let convertedTransaction: Array<Transaction> = [];
+                        for(let rawTransaction of transactionRawJson) {
+                            let details = "";
+                            if(!rawTransaction.details) {
+                                details = "";   
+                            } else {
+                                details = "" + rawTransaction.details
+                            }
+                            convertedTransaction.push({
+                                date: new Date(rawTransaction.date),
+                                transaction: rawTransaction.transactionName,
+                                category: "TODO",
+                                method: "TODO",
+                                detail: details,
+                                amount: parseFloat(rawTransaction.amount)
+                            })
+                        }
+                        resolve(convertedTransaction);
+                    } else {
+                        console.log("transaction_fetch_error: " + xhr.status);
+                        reject([]);
+                    }
+                }
+            };
+            xhr.ontimeout = function () {
+                reject('timeout')
+            }
+            xhr.send();
         });
-
-        let detailsRow = document.createElement('div');
-        detailsRow.className = "row";
-        let calendarDetails = CalendarDetails._calendarDetails;
-        calendarDetails.className = "col-7";
-        detailsRow.appendChild(calendarDetails);
-        mainDiv.appendChild(detailsRow);
     }
 }
 

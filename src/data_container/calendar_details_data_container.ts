@@ -1,5 +1,6 @@
 import { DataContainer } from './data_container';
-import { Actions } from '../mediator/mediator';
+import { CentralMediator } from '../mediator/mediator';
+import { Actions } from '../mediator/actions';
 
 interface CalendarDetailsState {
     readonly transactions: Array<Transaction>;
@@ -14,7 +15,7 @@ interface Transaction {
     readonly amount: number;
 }
 
-class CalendarDetailsDataContainer extends DataContainer<CalendarDetailsState> {
+class CalendarDetailsDataContainer implements DataContainer<CalendarDetailsState> {
 
     private static instance: CalendarDetailsDataContainer;
 
@@ -22,7 +23,7 @@ class CalendarDetailsDataContainer extends DataContainer<CalendarDetailsState> {
 
     private constructor() {
 
-        super({transactions: []});
+        this.state = {transactions: []};
     }
 
     static getInstance(): CalendarDetailsDataContainer {
@@ -31,6 +32,15 @@ class CalendarDetailsDataContainer extends DataContainer<CalendarDetailsState> {
         }
 
         return CalendarDetailsDataContainer.instance;
+    }
+
+    getState(): CalendarDetailsState {
+        return this.state;
+    }
+
+    setState(newState: CalendarDetailsState): void {
+        this.state = newState;
+        CentralMediator.getInstance().dispatch(this.getAction());
     }
 
     getAction(): Actions {
