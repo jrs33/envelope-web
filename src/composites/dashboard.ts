@@ -7,6 +7,7 @@ import { CalendarDetailsDataContainer, Transaction, CalendarDetailsState } from 
 import { CalendarDetailsDescriptionDataContainer } from '../data_container/calendar_details_description_container';
 import { RemainingDataContainer } from '../data_container/remaining_data_container';
 import { CategoryDataContainer, Category, CategoryState } from '../data_container/category_data_container';
+import { SourceDataContainer, SourceState, Source } from '../data_container/source_data_container';
 
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 
@@ -24,6 +25,7 @@ class Dashboard {
     private calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
     private remainingDataContainer: RemainingDataContainer;
     private categoryDataContainer: CategoryDataContainer;
+    private sourceDataContainer: SourceDataContainer;
 
     private router: Router;
     private route: String;
@@ -38,6 +40,7 @@ class Dashboard {
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
         this.remainingDataContainer = RemainingDataContainer.getInstance();
         this.categoryDataContainer = CategoryDataContainer.getInstance();
+        this.sourceDataContainer = SourceDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -69,6 +72,7 @@ class Dashboard {
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
         this.remainingDataContainer.setState({value: await this.getRemaining()});
         this.categoryDataContainer.setState(await this.getCategories());
+        this.sourceDataContainer.setState(await this.getSources());
     }
 
     private getTransactionsPromise(): Promise<CalendarDetailsState> {
@@ -163,6 +167,39 @@ class Dashboard {
 						reject({categories: []});
                     }
                 }
+            };
+            xhr.send();
+        });
+    }
+
+    private getSources(): Promise<SourceState> {
+        return new Promise(function (resolve, reject) {
+            var rawXmlHttpRequest = new XMLHttpRequest();
+            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/sources');
+            var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+            xhr.timeout = 2000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let sourceRawJson: Array<any> = JSON.parse(xhr.response);
+                        let convertedSources: Array<Source> = [];
+                        for(let rawSource of sourceRawJson) {
+                            convertedSources.push({
+                                id: parseInt(rawSource.id),
+                                userId: rawSource.userId,
+                                name: rawSource.name,
+                                description: rawSource.description
+                            });
+                        }
+                        resolve({sources: convertedSources});
+                    } else {
+                        console.log("category_fetch_error: " + xhr.status);
+						reject({categories: []});
+                    }
+                }
+            };
+            xhr.ontimeout = function () {
+                reject('timeout')
             };
             xhr.send();
         });

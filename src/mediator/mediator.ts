@@ -4,6 +4,7 @@ import { CalendarDetailsDataContainer, CalendarDetailsState } from '../data_cont
 import { CalendarDetailsDescriptionDataContainer, CalendarDetailsDescriptionState } from '../data_container/calendar_details_description_container';
 import { RemainingDataContainer, RemainingState } from '../data_container/remaining_data_container';
 import { CategoryDataContainer, CategoryState } from '../data_container/category_data_container';
+import { SourceDataContainer, SourceState } from '../data_container/source_data_container';
 
 import { ViewHandler } from '../view_handler/view_handler';
 import { CalendarDetailsViewHandler } from '../view_handler/calendar_details_view_handler';
@@ -21,6 +22,7 @@ class CentralMediator {
     private calendarDetailsDescriptionDataContainer: DataContainer<CalendarDetailsDescriptionState>;
     private remainingDataContainer: DataContainer<RemainingState>;
     private categoryDataContainer: DataContainer<CategoryState>;
+    private sourceDataContainer: DataContainer<SourceState>;
 
     // view handlers
     private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
@@ -33,6 +35,7 @@ class CentralMediator {
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
         this.remainingDataContainer = RemainingDataContainer.getInstance();
         this.categoryDataContainer = CategoryDataContainer.getInstance();
+        this.sourceDataContainer = SourceDataContainer.getInstance();
 
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
         this.calendarDetailsDescriptionViewHandler = new CalendarDetailsDescriptionViewHandler();
@@ -61,7 +64,12 @@ class CentralMediator {
             }
             case Actions.UPDATE_CATEGORIES: {
                 debugger;
-                console.log('need to update forms: ' + this.categoryDataContainer.getState());
+                console.log('category update: need to update forms: ' + this.categoryDataContainer.getState());
+                return true;
+            }
+            case Actions.UPDATE_SOURCES: {
+                debugger;
+                console.log('source update: need to update forms: ' + this.sourceDataContainer.getState());
                 return true;
             }
             default: {
