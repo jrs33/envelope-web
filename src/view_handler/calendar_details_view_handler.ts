@@ -7,8 +7,6 @@ class CalendarDetailsViewHandler implements ViewHandler<CalendarDetailsState> {
 
     handle(state: CalendarDetailsState): boolean {
 
-        console.log(document.body)
-
         let tableBody: HTMLElement = this.getDOMElement();
         
         for (let transaction of state.transactions) {

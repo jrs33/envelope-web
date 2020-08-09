@@ -9,7 +9,7 @@ const app = async () => {
 
     if (process.env.NODE_ENV == 'development') { 
         console.log('running_in_dev_env');
-        let dashboardConnector = new Dashboard();
+        let dashboardConnector = Dashboard.getInstance();
         let logout = new Logout();
         dashboardConnector.connect();
     } else {
@@ -23,7 +23,7 @@ const app = async () => {
                 AUTH.authorize();
             }
     
-            let dashboardConnector = new Dashboard();
+            let dashboardConnector = Dashboard.getInstance();
             let logout = new Logout();
             dashboardConnector.connect();
         });

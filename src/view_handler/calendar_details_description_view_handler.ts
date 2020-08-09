@@ -7,8 +7,6 @@ class CalendarDetailsDescriptionViewHandler implements ViewHandler<CalendarDetai
 
     handle(state: CalendarDetailsDescriptionState): boolean {
 
-        console.log(document.body)
-
         let transactionSelectDescription: HTMLElement = this.getDOMElement();
         transactionSelectDescription.textContent = state.describe;
 

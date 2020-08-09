@@ -1,13 +1,16 @@
 import { ViewHandler } from './view_handler';
 import { SourceCategoryComposite, Category, Source } from '../data_container/source_category_composite'
+import { Dashboard } from '../composites/dashboard';
+import { AuthorizationDecorator } from '../auth/auth_decorator';
+import { ViewActions } from './view_actions';
+
+const CONFIG = require('../../config.local.json');
 
 class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite> {
 
     constructor() {}
 
     handle(state: SourceCategoryComposite): boolean {
-
-        console.log(document.body)
 
         let formTabContent: HTMLElement = this.getDOMElement();
         let header: HTMLHeadingElement = document.createElement('h1');
@@ -150,7 +153,15 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 		var createTransactionButton = document.createElement('button');
 		createTransactionButton.textContent = "Create";
 		createTransactionButton.className = "btn btn-primary";
-		createTransactionForm.appendChild(createTransactionButton);
+        createTransactionForm.appendChild(createTransactionButton);
+        
+        createTransactionForm.addEventListener('submit', event => {
+            this.createTransaction(event, () => {
+                //TODO: send a confirmation alert here
+                createTransactionForm.reset();
+                Dashboard.getInstance().dispatch(ViewActions.TRANSACTION_CREATED);
+            });
+        });
 
 		return createTransactionForm;
     }
@@ -179,6 +190,36 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
     
     private getTransactionTypes() {
 		return ["CREDIT", "DEBIT"];
+    }
+    
+    private createTransaction(transaction, callback) {
+		transaction.preventDefault();
+
+		console.log(transaction.target);
+		let transactionName = transaction.target["name"].value;
+		let transactionAmount = transaction.target["amount"].value;
+		let transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
+		let transactionType = transaction.target["transactionType"].value;
+		let transactionSourceId = parseInt(transaction.target["transactionFormSourceSelect"].value, 10);
+		let transactionDate = transaction.target["date"].value;
+
+		var rawXmlHttpRequest = new XMLHttpRequest();
+		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create');
+        var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				callback();
+			}
+		};
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.send(JSON.stringify({
+			transactionName: transactionName,
+			amount: transactionAmount,
+			envelopeId: transactionEnvelopeId,
+			transactionType: transactionType,
+			sourceId: transactionSourceId,
+			date: transactionDate
+		}));
 	}
 }
 

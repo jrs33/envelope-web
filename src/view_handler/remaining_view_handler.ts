@@ -7,8 +7,6 @@ class RemainingViewHandler implements ViewHandler<RemainingState> {
 
     handle(state: RemainingState): boolean {
 
-        console.log(document.body)
-
         let remaining: HTMLElement = this.getDOMElement();
         remaining.textContent = state.value;
 

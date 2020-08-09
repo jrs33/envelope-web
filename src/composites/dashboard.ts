@@ -1,7 +1,4 @@
-import { Calendar } from '../calendar/calendar';
-import { CalendarDetails } from '../calendar/calendar_details';
 import { Router } from '../routing/router';
-import { StatisticDelegate } from '../statistics/statistics_delegate';
 
 import { CalendarDetailsDataContainer, Transaction, CalendarDetailsState } from '../data_container/calendar_details_data_container';
 import { CalendarDetailsDescriptionDataContainer } from '../data_container/calendar_details_description_container';
@@ -9,17 +6,16 @@ import { RemainingDataContainer } from '../data_container/remaining_data_contain
 import { CategoryDataContainer, Category, CategoryState } from '../data_container/category_data_container';
 import { SourceDataContainer, SourceState, Source } from '../data_container/source_data_container';
 
+import { ViewActions } from '../view_handler/view_actions';
+
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 
 const CONFIG = require('../../config.local.json');
 
 class Dashboard {
 
-    static readonly ROUTE_TO_ACTION = 'dashboard';
-
-    calendar : Calendar;
-    calendarDetails: CalendarDetails;
-    statistics: StatisticDelegate;
+    private static readonly ROUTE_TO_ACTION: string = 'dashboard';
+    private static instance: Dashboard;
 
     private calendarDetailsDataContainer: CalendarDetailsDataContainer;
     private calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
@@ -30,11 +26,7 @@ class Dashboard {
     private router: Router;
     private route: String;
 
-    constructor() {
-
-        this.calendar = new Calendar();
-        this.calendarDetails = new CalendarDetails();
-        this.statistics = new StatisticDelegate();
+    private constructor() {
 
         this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
         this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
@@ -53,19 +45,15 @@ class Dashboard {
         });
     }
 
-    async connect() {
+    static getInstance(): Dashboard {
+        if(!Dashboard.instance) {
+            Dashboard.instance = new Dashboard();
+        }
 
-        // get reference to html elements that will be dispatching events to data containers
-        // let remainingHeader: HTMLElement = document.getElementById('remaining-amount');
-        // TODO: form set up
-        let transactionFormTabLink: HTMLElement = document.getElementById('transaction-form-sublink');
-        let categoryFormTabLink: HTMLElement = document.getElementById('category-form-sublink');
-        let sourceFormTabLink: HTMLElement = document.getElementById('source-form-sublink');
-        let formTabContent: HTMLElement = document.getElementById('my-tab-content');
-        let monthIndicator: HTMLElement = document.getElementById('month-indicator');
-        let dateGrid: HTMLElement = document.getElementById('date-grid');
-        // let transactionSelectDescription: HTMLElement = document.getElementById('transaction-select-description');
-        // let calendarDetailsBody: HTMLElement = document.getElementById('calendar-details-body');
+        return Dashboard.instance;
+    }
+
+    async connect() {
 
         // initialize the html element state
         this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise());
@@ -73,6 +61,19 @@ class Dashboard {
         this.remainingDataContainer.setState({value: await this.getRemaining()});
         this.categoryDataContainer.setState(await this.getCategories());
         this.sourceDataContainer.setState(await this.getSources());
+    }
+
+    async dispatch(action: ViewActions) {
+        
+        switch(action) {
+            case ViewActions.TRANSACTION_CREATED: {
+                this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise());
+                this.remainingDataContainer.setState({value: await this.getRemaining()});
+            }
+            default: {
+                break;
+            }
+        }
     }
 
     private getTransactionsPromise(): Promise<CalendarDetailsState> {
