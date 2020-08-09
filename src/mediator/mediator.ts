@@ -5,11 +5,13 @@ import { CalendarDetailsDescriptionDataContainer, CalendarDetailsDescriptionStat
 import { RemainingDataContainer, RemainingState } from '../data_container/remaining_data_container';
 import { CategoryDataContainer, CategoryState } from '../data_container/category_data_container';
 import { SourceDataContainer, SourceState } from '../data_container/source_data_container';
+import { SourceCategoryComposite } from '../data_container/source_category_composite';
 
 import { ViewHandler } from '../view_handler/view_handler';
 import { CalendarDetailsViewHandler } from '../view_handler/calendar_details_view_handler';
 import { CalendarDetailsDescriptionViewHandler } from '../view_handler/calendar_details_description_view_handler';
 import { RemainingViewHandler } from '../view_handler/remaining_view_handler';
+import { TransactionFormViewHandler } from '../view_handler/transaction_form_view_handler';
 
 import { Actions } from './actions';
 
@@ -28,6 +30,7 @@ class CentralMediator {
     private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
     private calendarDetailsDescriptionViewHandler: ViewHandler<CalendarDetailsDescriptionState>;
     private remainingViewHandler: ViewHandler<RemainingState>;
+    private transactionFormViewHandler: ViewHandler<SourceCategoryComposite>;
 
     private constructor() {
 
@@ -40,6 +43,7 @@ class CentralMediator {
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
         this.calendarDetailsDescriptionViewHandler = new CalendarDetailsDescriptionViewHandler();
         this.remainingViewHandler = new RemainingViewHandler();
+        this.transactionFormViewHandler = new TransactionFormViewHandler();
     }
 
     static getInstance(): CentralMediator {
@@ -63,13 +67,12 @@ class CentralMediator {
                 return this.remainingViewHandler.handle(this.remainingDataContainer.getState());
             }
             case Actions.UPDATE_CATEGORIES: {
-                debugger;
                 console.log('category update: need to update forms: ' + this.categoryDataContainer.getState());
                 return true;
             }
             case Actions.UPDATE_SOURCES: {
-                debugger;
-                console.log('source update: need to update forms: ' + this.sourceDataContainer.getState());
+                // TEMP
+                this.transactionFormViewHandler.handle({sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()});
                 return true;
             }
             default: {
