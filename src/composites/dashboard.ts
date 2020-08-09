@@ -56,18 +56,21 @@ class Dashboard {
     async connect() {
 
         // initialize the html element state
-        this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise());
+        let categoryState: CategoryState = await this.getCategories();
+        let sourceState: SourceState = await this.getSources();
+        this.categoryDataContainer.setState(categoryState);
+        this.sourceDataContainer.setState(sourceState);
+        
+        this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise(categoryState, sourceState));
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
         this.remainingDataContainer.setState({value: await this.getRemaining()});
-        this.categoryDataContainer.setState(await this.getCategories());
-        this.sourceDataContainer.setState(await this.getSources());
     }
 
     async dispatch(action: ViewActions) {
         
         switch(action) {
             case ViewActions.TRANSACTION_CREATED: {
-                this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise());
+                this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise(this.categoryDataContainer.getState(), this.sourceDataContainer.getState()));
                 this.remainingDataContainer.setState({value: await this.getRemaining()});
             }
             default: {
@@ -76,7 +79,7 @@ class Dashboard {
         }
     }
 
-    private getTransactionsPromise(): Promise<CalendarDetailsState> {
+    private getTransactionsPromise(categoryState: CategoryState, sourceState: SourceState): Promise<CalendarDetailsState> {
         
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
@@ -96,11 +99,21 @@ class Dashboard {
                             } else {
                                 details = "" + rawTransaction.details
                             }
+
+                            debugger;
+                            let category: Category = categoryState.categories.find(category => category.id == parseInt(rawTransaction.envelopeId));
+                            let categoryName: string = category ? category.name : "";
+
+                            let source: Source = sourceState.sources.find(source => source.id == parseInt(rawTransaction.sourceId));
+                            let sourceName: string = source ? source.name : "";
+
                             convertedTransaction.push({
                                 date: new Date(rawTransaction.date),
                                 transaction: rawTransaction.transactionName,
-                                category: "TODO",
-                                method: "TODO",
+                                categoryId: parseInt(rawTransaction.envelopeId),
+                                category: categoryName,
+                                methodId: parseInt(rawTransaction.sourceId),
+                                method: sourceName,
                                 detail: details,
                                 amount: parseFloat(rawTransaction.amount)
                             })
