@@ -159,6 +159,8 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
             this.createTransaction(event, () => {
                 //TODO: send a confirmation alert here
                 createTransactionForm.reset();
+
+                //TODO: decouple view handlers from composite views
                 Dashboard.getInstance().dispatch(ViewActions.TRANSACTION_CREATED);
             });
         });

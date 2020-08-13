@@ -5,6 +5,7 @@ import { CalendarDetailsDescriptionDataContainer } from '../data_container/calen
 import { RemainingDataContainer } from '../data_container/remaining_data_container';
 import { CategoryDataContainer, Category, CategoryState } from '../data_container/category_data_container';
 import { SourceDataContainer, SourceState, Source } from '../data_container/source_data_container';
+import { CalendarMonthDataContainer, CalendarMonthState } from '../data_container/calendar_month_data_container';
 
 import { ViewActions } from '../view_handler/view_actions';
 
@@ -22,6 +23,7 @@ class Dashboard {
     private remainingDataContainer: RemainingDataContainer;
     private categoryDataContainer: CategoryDataContainer;
     private sourceDataContainer: SourceDataContainer;
+    private calendarMonthDataContainer: CalendarMonthDataContainer;
 
     private router: Router;
     private route: String;
@@ -33,6 +35,7 @@ class Dashboard {
         this.remainingDataContainer = RemainingDataContainer.getInstance();
         this.categoryDataContainer = CategoryDataContainer.getInstance();
         this.sourceDataContainer = SourceDataContainer.getInstance();
+        this.calendarMonthDataContainer = CalendarMonthDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -61,9 +64,12 @@ class Dashboard {
         this.categoryDataContainer.setState(categoryState);
         this.sourceDataContainer.setState(sourceState);
         
-        this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise(categoryState, sourceState));
+        let transactionPromise: Promise<CalendarDetailsState> = this.getTransactionsPromise(categoryState, sourceState);
+        this.calendarDetailsDataContainer.setState(await transactionPromise);
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
         this.remainingDataContainer.setState({value: await this.getRemaining()});
+
+        this.calendarMonthDataContainer.setState({selectedMonth: 8, selectedYear: 2020, transactions: (await transactionPromise).transactions});
     }
 
     async dispatch(action: ViewActions) {

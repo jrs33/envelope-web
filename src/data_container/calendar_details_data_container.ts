@@ -1,23 +1,10 @@
 import { DataContainer } from './data_container';
 import { CentralMediator } from '../mediator/mediator';
 import { Actions } from '../mediator/actions';
+import Transaction from './transaction';
 
 interface CalendarDetailsState {
     readonly transactions: Array<Transaction>;
-}
-
-interface Transaction {
-    readonly date: Date;
-    readonly transaction: string;
-
-    readonly categoryId: number;
-    readonly category: string;
-
-    readonly methodId: number;
-    readonly method: string;
-    
-    readonly detail?: string;
-    readonly amount: number;
 }
 
 class CalendarDetailsDataContainer implements DataContainer<CalendarDetailsState> {
