@@ -8,7 +8,9 @@ test('makes sure state is set', () => {
         transaction: "a_test_transaction",
         category: "Test",
         method: "Chase Card",
-        amount: 123.32
+        amount: 123.32,
+        categoryId: 1,
+        methodId: 3
     };
     let transactions: Array<Transaction> = new Array();
     transactions.push(transaction);
