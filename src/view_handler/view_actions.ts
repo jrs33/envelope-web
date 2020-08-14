@@ -1,5 +1,5 @@
 enum ViewActions {
-    TRANSACTION_CREATED = "transaction_created"
+    TRANSACTION_CREATED = "TRANSACTION_CREATED"
 };
 
 export { ViewActions };

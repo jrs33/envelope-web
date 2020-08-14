@@ -22,6 +22,7 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
         
         debugger;
         let dateGrid: HTMLElement = document.getElementById('date-grid');
+        dateGrid.innerHTML = '';
 
         let daysWithOffset: DaysWithOffset = this.getDaysWithOffset(state);
         daysWithOffset.days[0].style.gridColumn = "" + daysWithOffset.offset;
@@ -35,7 +36,6 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
 
     private getDaysWithOffset(state: CalendarMonthState): DaysWithOffset {
 
-        debugger;
         let firstDay: number = new Date(state.selectedYear, state.selectedMonth-1, 1).getDay() + 1;
         let daysInMonth = this.getDaysInMonth(state.selectedMonth, state.selectedYear);
 
@@ -51,7 +51,6 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
                 transactionDayIndex.set(date, [transaction]);
             }
         }
-        debugger
         
         let dayArray: Array<HTMLDivElement> = [];
         for (let day = 1; day <= daysInMonth; day++) {

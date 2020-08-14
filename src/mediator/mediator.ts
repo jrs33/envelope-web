@@ -16,6 +16,8 @@ import { TransactionFormViewHandler } from '../view_handler/transaction_form_vie
 import { CalendarDayViewHandler } from '../view_handler/calendar_day_view_handler';
 
 import { Actions } from './actions';
+import { Dashboard } from '../composites/dashboard';
+import { ViewActions } from '../view_handler/view_actions';
 
 class CentralMediator {
 
@@ -63,6 +65,7 @@ class CentralMediator {
     dispatch(action: Actions): boolean {
 
         switch (action) {
+            case Actions.DAY_CLICKED:
             case Actions.UPDATE_CALENDAR_DETAILS: {
                 return this.calendarDetailsViewHandler.handle(this.calendarDetailsDataContainer.getState());
             }
