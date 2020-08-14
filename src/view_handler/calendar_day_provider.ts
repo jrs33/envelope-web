@@ -10,11 +10,12 @@ class CalendarDayProvider {
         let dayNumSpan: HTMLSpanElement = document.createElement('span');
         let timeElement: HTMLTimeElement = document.createElement('time');
         timeElement.dateTime = this.formatDate(date);
-        timeElement.textContent = "" + date.getDay();
+        timeElement.textContent = "" + date.getDate();
         dayNumSpan.appendChild(timeElement);
 
         let moneyHeader: HTMLHeadingElement = document.createElement('h4');
-        moneyHeader.className = "text-align: center; padding: 20px;";
+        moneyHeader.style.textAlign = "center";
+        moneyHeader.style.padding = "20px";
         moneyHeader.textContent = "$" + money.toFixed(2);
 
         dayDiv.appendChild(dayNumSpan);

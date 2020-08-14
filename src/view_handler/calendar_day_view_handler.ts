@@ -35,13 +35,36 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
 
     private getDaysWithOffset(state: CalendarMonthState): DaysWithOffset {
 
-        let firstDay: number = new Date(state.selectedYear, state.selectedMonth, 1).getDay() + 1;
+        debugger;
+        let firstDay: number = new Date(state.selectedYear, state.selectedMonth-1, 1).getDay() + 1;
         let daysInMonth = this.getDaysInMonth(state.selectedMonth, state.selectedYear);
 
-        let transactionDayIndex = Object.assign({}, ...state.transactions.map(t => ({[t.date.getDay()]: t})));
+        let transactionDayIndex: Map<number, Array<Transaction>> = new Map();
+        debugger;
+        for (let transaction of state.transactions) {
+            let date: number = transaction.date.getDate();
+            if (transactionDayIndex.has(transaction.date.getDate())) {
+                let currTransactions: Array<Transaction> = transactionDayIndex.get(date);
+                currTransactions.push(transaction);
+                transactionDayIndex.set(date, currTransactions);
+            } else {
+                transactionDayIndex.set(date, [transaction]);
+            }
+        }
+        debugger
+        
         let dayArray: Array<HTMLDivElement> = [];
-        for (let day = 1; day < daysInMonth; day++) {
-            let dayElement: HTMLDivElement = this.dayProvider.for(new Date(state.selectedYear, state.selectedMonth, day), transactionDayIndex[day]);
+        for (let day = 1; day <= daysInMonth; day++) {
+            let transactions: Array<Transaction>
+            let amount: number;
+            if (transactionDayIndex.has(day)) {
+                transactions = transactionDayIndex.get(day);
+                amount = transactions.map(t => t.amount).reduce((accumulator, currVal) => accumulator + currVal);
+            } else {
+                transactions = [];
+                amount = 0;
+            }
+            let dayElement: HTMLDivElement = this.dayProvider.for(new Date(state.selectedYear, state.selectedMonth-1, day), amount);
             dayArray.push(dayElement);
         }
 

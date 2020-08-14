@@ -6,12 +6,14 @@ import { RemainingDataContainer, RemainingState } from '../data_container/remain
 import { CategoryDataContainer, CategoryState } from '../data_container/category_data_container';
 import { SourceDataContainer, SourceState } from '../data_container/source_data_container';
 import { SourceCategoryComposite } from '../data_container/source_category_composite';
+import { CalendarMonthState, CalendarMonthDataContainer } from '../data_container/calendar_month_data_container';
 
 import { ViewHandler } from '../view_handler/view_handler';
 import { CalendarDetailsViewHandler } from '../view_handler/calendar_details_view_handler';
 import { CalendarDetailsDescriptionViewHandler } from '../view_handler/calendar_details_description_view_handler';
 import { RemainingViewHandler } from '../view_handler/remaining_view_handler';
 import { TransactionFormViewHandler } from '../view_handler/transaction_form_view_handler';
+import { CalendarDayViewHandler } from '../view_handler/calendar_day_view_handler';
 
 import { Actions } from './actions';
 
@@ -25,12 +27,14 @@ class CentralMediator {
     private remainingDataContainer: DataContainer<RemainingState>;
     private categoryDataContainer: DataContainer<CategoryState>;
     private sourceDataContainer: DataContainer<SourceState>;
+    private calendarMonthDataContainer: DataContainer<CalendarMonthState>;
 
     // view handlers
     private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
     private calendarDetailsDescriptionViewHandler: ViewHandler<CalendarDetailsDescriptionState>;
     private remainingViewHandler: ViewHandler<RemainingState>;
     private transactionFormViewHandler: ViewHandler<SourceCategoryComposite>;
+    private calendarDayViewHandler: ViewHandler<CalendarMonthState>;
 
     private constructor() {
 
@@ -39,11 +43,13 @@ class CentralMediator {
         this.remainingDataContainer = RemainingDataContainer.getInstance();
         this.categoryDataContainer = CategoryDataContainer.getInstance();
         this.sourceDataContainer = SourceDataContainer.getInstance();
+        this.calendarMonthDataContainer = CalendarMonthDataContainer.getInstance();
 
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
         this.calendarDetailsDescriptionViewHandler = new CalendarDetailsDescriptionViewHandler();
         this.remainingViewHandler = new RemainingViewHandler();
         this.transactionFormViewHandler = new TransactionFormViewHandler();
+        this.calendarDayViewHandler = new CalendarDayViewHandler();
     }
 
     static getInstance(): CentralMediator {
@@ -74,6 +80,9 @@ class CentralMediator {
                 // TEMP
                 this.transactionFormViewHandler.handle({sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()});
                 return true;
+            }
+            case Actions.UPDATE_MONTH: {
+                this.calendarDayViewHandler.handle(this.calendarMonthDataContainer.getState());
             }
             default: {
                 console.log("unrecognized_action: " + action);

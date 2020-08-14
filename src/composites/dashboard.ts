@@ -106,7 +106,6 @@ class Dashboard {
                                 details = "" + rawTransaction.details
                             }
 
-                            debugger;
                             let category: Category = categoryState.categories.find(category => category.id == parseInt(rawTransaction.envelopeId));
                             let categoryName: string = category ? category.name : "";
 
