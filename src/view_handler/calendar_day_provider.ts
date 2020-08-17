@@ -34,9 +34,8 @@ class CalendarDayProvider {
         timeElement.textContent = "" + date.getDate();
         dayNumSpan.appendChild(timeElement);
 
-        let moneyHeader: HTMLHeadingElement = document.createElement('h4');
+        let moneyHeader: HTMLHeadingElement = document.createElement('h6');
         moneyHeader.style.textAlign = "center";
-        moneyHeader.style.padding = "20px";
         moneyHeader.textContent = "$" + money.toFixed(2);
 
         dayDiv.appendChild(dayNumSpan);

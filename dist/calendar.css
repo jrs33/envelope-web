@@ -11,14 +11,12 @@
     grid-gap: 0px;
     border: 1px solid #dfdfdf;
     border-radius: 5px;
+    width: 100%;
 }
-
-/* .day-of-week {
-    margin-top: 1.25em;
-} */
 
 .day-of-week {
     text-align: center;
+    width: 100%;
 }
 
 .day-of-week .day-of-week-item {
@@ -31,6 +29,7 @@
 
 .date-grid .date-grid-item {
     border: 1px solid lightgray;
+    width: 100%;
 }
 
 .date-grid div span {
