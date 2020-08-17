@@ -13,7 +13,7 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
     handle(state: SourceCategoryComposite): boolean {
 
         let formTabContent: HTMLElement = this.getDOMElement();
-        let header: HTMLHeadingElement = document.createElement('h1');
+        let header: HTMLHeadingElement = document.createElement('h4');
         header.textContent = "Create Transaction";
         formTabContent.appendChild(header);
         formTabContent.appendChild(this.renderCreateTransactionForm(state));
