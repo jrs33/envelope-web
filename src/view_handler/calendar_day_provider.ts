@@ -4,6 +4,7 @@ import { CategoryDataContainer, Category, CategoryState } from "../data_containe
 import { SourceDataContainer, Source, SourceState } from "../data_container/source_data_container";
 import { CalendarDetailsDataContainer } from "../data_container/calendar_details_data_container";
 import { CentralMediator, Actions } from "../mediator/mediator";
+import { CalendarDetailsDescriptionDataContainer } from "../data_container/calendar_details_description_container";
 
 const CONFIG = require('../../config.local.json');
 
@@ -12,12 +13,14 @@ class CalendarDayProvider {
     private categoryDataContainer: CategoryDataContainer;
     private sourceDataContainer: SourceDataContainer;
     private calendarDetailsDataContainer: CalendarDetailsDataContainer;
+    private calendarDetailsDescriptionDataContainer: CalendarDetailsDescriptionDataContainer;
 
     constructor() {
 
         this.categoryDataContainer = CategoryDataContainer.getInstance();
         this.sourceDataContainer = SourceDataContainer.getInstance();
         this.calendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
+        this.calendarDetailsDescriptionDataContainer = CalendarDetailsDescriptionDataContainer.getInstance();
     }
 
     for(date: Date, money: number): HTMLDivElement {
@@ -39,6 +42,7 @@ class CalendarDayProvider {
         dayDiv.appendChild(dayNumSpan);
         dayDiv.appendChild(moneyHeader);
         dayDiv.addEventListener("click", event => {
+            this.calendarDetailsDescriptionDataContainer.setState({describe: "August 8th"});
             this.getTransactionsPromise(date.getFullYear(), date.getMonth()+1, date.getDate())
                 .then(transactionArr => this.calendarDetailsDataContainer.setState({transactions: transactionArr}))
                 .then(() => CentralMediator.getInstance().dispatch(Actions.DAY_CLICKED))
