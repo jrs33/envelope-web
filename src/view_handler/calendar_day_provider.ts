@@ -10,6 +10,9 @@ const CONFIG = require('../../config.local.json');
 
 class CalendarDayProvider {
 
+    private static readonly months = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
     private categoryDataContainer: CategoryDataContainer;
     private sourceDataContainer: SourceDataContainer;
     private calendarDetailsDataContainer: CalendarDetailsDataContainer;
@@ -41,7 +44,7 @@ class CalendarDayProvider {
         dayDiv.appendChild(dayNumSpan);
         dayDiv.appendChild(moneyHeader);
         dayDiv.addEventListener("click", event => {
-            this.calendarDetailsDescriptionDataContainer.setState({describe: "August 8th"});
+            this.calendarDetailsDescriptionDataContainer.setState({describe: [CalendarDayProvider.months[date.getMonth()], date.getDate()].join(" ")});
             this.getTransactionsPromise(date.getFullYear(), date.getMonth()+1, date.getDate())
                 .then(transactionArr => this.calendarDetailsDataContainer.setState({transactions: transactionArr}))
                 .then(() => CentralMediator.getInstance().dispatch(Actions.DAY_CLICKED))
