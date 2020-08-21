@@ -2,6 +2,7 @@ import { ViewHandler } from "./view_handler";
 import { SourceCategoryComposite } from "../data_container/source_category_composite";
 import { TransactionFormViewHandler } from "./transaction_form_view_handler";
 import { MethodFormViewHandler } from './method_form_view_handler';
+import { CategoryFormViewHandler } from './category_form_view_handler';
 
 enum ActiveLinks {
     TRANSACTION = "TRANSACTION",
@@ -24,11 +25,13 @@ class FormTabsCompositeViewHandler implements ViewHandler<ActiveLinkState> {
 
     private transactionFormViewHandler: TransactionFormViewHandler;
     private methodFormViewHandler: MethodFormViewHandler;
+    private categoryFormViewHandler: CategoryFormViewHandler;
 
     constructor() {
 
         this.transactionFormViewHandler = new TransactionFormViewHandler();
         this.methodFormViewHandler = new MethodFormViewHandler();
+        this.categoryFormViewHandler = new CategoryFormViewHandler();
     }
 
     handle(state: ActiveLinkState): boolean {
@@ -85,7 +88,7 @@ class FormTabsCompositeViewHandler implements ViewHandler<ActiveLinkState> {
                 return this.transactionFormViewHandler.handle(state.sourceCategoryState);
             }
             case ActiveLinks.CATEGORY: {
-                throw new Error("Display Not Implemented: " + state.link);
+                return this.categoryFormViewHandler.handle(undefined);
             }
             case ActiveLinks.METHOD: {
                 return this.methodFormViewHandler.handle(undefined);

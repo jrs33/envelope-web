@@ -119,7 +119,7 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 
 		var createTransactionSourceLabel = document.createElement('label');
 		createTransactionSourceLabel.setAttribute("for", selectSourceElement.id);
-		createTransactionSourceLabel.textContent = "Source";
+		createTransactionSourceLabel.textContent = "Method";
 
 		transactionSourceFormGroup.appendChild(createTransactionSourceLabel);
 		transactionSourceFormGroup.appendChild(selectSourceElement);
