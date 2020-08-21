@@ -16,6 +16,8 @@ import { TransactionFormViewHandler } from '../view_handler/transaction_form_vie
 import { CalendarDayViewHandler } from '../view_handler/calendar_day_view_handler';
 
 import { Actions } from './actions';
+import { ActiveLinkState, FormTabsCompositeViewHandler, ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
+import { FormTabsDataContainer } from '../data_container/form_tabs_data_container';
 
 class CentralMediator {
 
@@ -28,6 +30,7 @@ class CentralMediator {
     private categoryDataContainer: DataContainer<CategoryState>;
     private sourceDataContainer: DataContainer<SourceState>;
     private calendarMonthDataContainer: DataContainer<CalendarMonthState>;
+    private formTabsDataContainer: DataContainer<ActiveLinkState>;
 
     // view handlers
     private calendarDetailsViewHandler: ViewHandler<CalendarDetailsState>;
@@ -35,6 +38,7 @@ class CentralMediator {
     private remainingViewHandler: ViewHandler<RemainingState>;
     private transactionFormViewHandler: ViewHandler<SourceCategoryComposite>;
     private calendarDayViewHandler: ViewHandler<CalendarMonthState>;
+    private formTabsViewHandler: ViewHandler<ActiveLinkState>;
 
     private constructor() {
 
@@ -44,12 +48,14 @@ class CentralMediator {
         this.categoryDataContainer = CategoryDataContainer.getInstance();
         this.sourceDataContainer = SourceDataContainer.getInstance();
         this.calendarMonthDataContainer = CalendarMonthDataContainer.getInstance();
+        this.formTabsDataContainer = FormTabsDataContainer.getInstance();
 
         this.calendarDetailsViewHandler = new CalendarDetailsViewHandler();
         this.calendarDetailsDescriptionViewHandler = new CalendarDetailsDescriptionViewHandler();
         this.remainingViewHandler = new RemainingViewHandler();
         this.transactionFormViewHandler = new TransactionFormViewHandler();
         this.calendarDayViewHandler = new CalendarDayViewHandler();
+        this.formTabsViewHandler = new FormTabsCompositeViewHandler();
     }
 
     static getInstance(): CentralMediator {
@@ -77,16 +83,16 @@ class CentralMediator {
                 return this.remainingViewHandler.handle(this.remainingDataContainer.getState());
             }
             case Actions.UPDATE_CATEGORIES: {
-                console.log('category update: need to update forms: ' + this.categoryDataContainer.getState());
                 return true;
             }
             case Actions.UPDATE_SOURCES: {
-                // TEMP
-                this.transactionFormViewHandler.handle({sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()});
                 return true;
             }
             case Actions.UPDATE_MONTH: {
                 this.calendarDayViewHandler.handle(this.calendarMonthDataContainer.getState());
+            }
+            case Actions.FORM_TAB_CLICKED: {
+                this.formTabsViewHandler.handle(this.formTabsDataContainer.getState());
             }
             default: {
                 console.log("unrecognized_action: " + action);

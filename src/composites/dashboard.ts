@@ -6,10 +6,12 @@ import { RemainingDataContainer } from '../data_container/remaining_data_contain
 import { CategoryDataContainer, Category, CategoryState } from '../data_container/category_data_container';
 import { SourceDataContainer, SourceState, Source } from '../data_container/source_data_container';
 import { CalendarMonthDataContainer, CalendarMonthState } from '../data_container/calendar_month_data_container';
+import { FormTabsDataContainer } from '../data_container/form_tabs_data_container';
 
 import { ViewActions } from '../view_handler/view_actions';
 
 import { AuthorizationDecorator } from '../auth/auth_decorator';
+import { ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
 
 const CONFIG = require('../../config.local.json');
 
@@ -24,6 +26,7 @@ class Dashboard {
     private categoryDataContainer: CategoryDataContainer;
     private sourceDataContainer: SourceDataContainer;
     private calendarMonthDataContainer: CalendarMonthDataContainer;
+    private formTabsDataContainer: FormTabsDataContainer
 
     private router: Router;
     private route: String;
@@ -36,6 +39,7 @@ class Dashboard {
         this.categoryDataContainer = CategoryDataContainer.getInstance();
         this.sourceDataContainer = SourceDataContainer.getInstance();
         this.calendarMonthDataContainer = CalendarMonthDataContainer.getInstance();
+        this.formTabsDataContainer = FormTabsDataContainer.getInstance();
 
         this.router = new Router();
         this.route = this.router.getRoute();
@@ -63,6 +67,17 @@ class Dashboard {
         let sourceState: SourceState = await this.getSources();
         this.categoryDataContainer.setState(categoryState);
         this.sourceDataContainer.setState(sourceState);
+
+        this.formTabsDataContainer.setState({link: ActiveLinks.TRANSACTION, sourceCategoryState: {sourceState: sourceState, categoryState: categoryState}});
+        document.getElementById("transaction-form-sublink").addEventListener("click", event => {
+            this.formTabsDataContainer.setState({link: ActiveLinks.TRANSACTION, sourceCategoryState: {sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()}});
+        });
+        document.getElementById("category-form-sublink").addEventListener("click", event => {
+            this.formTabsDataContainer.setState({link: ActiveLinks.CATEGORY, sourceCategoryState: {sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()}});
+        });
+        document.getElementById("method-form-sublink").addEventListener("click", event => {
+            this.formTabsDataContainer.setState({link: ActiveLinks.METHOD, sourceCategoryState: {sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()}});
+        });
         
         let transactionPromise: Promise<CalendarDetailsState> = this.getTransactionsPromise(categoryState, sourceState);
         this.calendarDetailsDataContainer.setState(await transactionPromise);
