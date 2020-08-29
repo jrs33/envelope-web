@@ -84,7 +84,34 @@ class Dashboard {
         this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
         this.remainingDataContainer.setState({value: await this.getRemaining()});
 
-        this.calendarMonthDataContainer.setState({selectedMonth: 8, selectedYear: 2020, transactions: (await transactionPromise).transactions});
+        let currentDate = new Date();
+        this.calendarMonthDataContainer.setState({selectedMonth: currentDate.getMonth() + 1, selectedYear: currentDate.getFullYear(), transactions: (await transactionPromise).transactions});
+        document.getElementById("previous-month").addEventListener("click", event => {
+            let currentMonthState = this.calendarMonthDataContainer.getState();
+            let newMonth = currentMonthState.selectedMonth - 1;
+            this.getTransactionsPromise(categoryState, sourceState)
+                .then(state => {
+                    this.calendarMonthDataContainer.setState({
+                        selectedMonth: newMonth, 
+                        selectedYear: currentDate.getFullYear(), 
+                        transactions: state.transactions
+                    });
+                })
+                .catch(err => console.log("error_switching_months: " + err));
+        });
+        document.getElementById("next-month").addEventListener("click", event => {
+            let currentMonthState = this.calendarMonthDataContainer.getState();
+            let newMonth = currentMonthState.selectedMonth + 1;
+            this.getTransactionsPromise(categoryState, sourceState)
+                .then(state => {
+                    this.calendarMonthDataContainer.setState({
+                        selectedMonth: newMonth, 
+                        selectedYear: currentDate.getFullYear(), 
+                        transactions: state.transactions
+                    });
+                })
+                .catch(err => console.log("error_switching_months: " + err));
+        });
     }
 
     async dispatch(action: ViewActions) {
