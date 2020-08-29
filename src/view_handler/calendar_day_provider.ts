@@ -10,7 +10,7 @@ const CONFIG = require('../../config.local.json');
 
 class CalendarDayProvider {
 
-    private static readonly months = ["January", "February", "March", "April", "May", "June",
+    public static readonly months = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 
     private categoryDataContainer: CategoryDataContainer;

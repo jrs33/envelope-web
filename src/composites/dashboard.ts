@@ -88,12 +88,22 @@ class Dashboard {
         this.calendarMonthDataContainer.setState({selectedMonth: currentDate.getMonth() + 1, selectedYear: currentDate.getFullYear(), transactions: (await transactionPromise).transactions});
         document.getElementById("previous-month").addEventListener("click", event => {
             let currentMonthState = this.calendarMonthDataContainer.getState();
-            let newMonth = currentMonthState.selectedMonth - 1;
+            
+            let newMonth: number;
+            let newYear: number;
+            if (currentMonthState.selectedMonth == 1) {
+                newMonth = 12;
+                newYear = currentMonthState.selectedYear - 1;
+            } else {
+                newMonth = currentMonthState.selectedMonth - 1;
+                newYear = currentMonthState.selectedYear;
+            }
+
             this.getTransactionsPromise(categoryState, sourceState)
                 .then(state => {
                     this.calendarMonthDataContainer.setState({
                         selectedMonth: newMonth, 
-                        selectedYear: currentDate.getFullYear(), 
+                        selectedYear: newYear, 
                         transactions: state.transactions
                     });
                 })
@@ -101,12 +111,22 @@ class Dashboard {
         });
         document.getElementById("next-month").addEventListener("click", event => {
             let currentMonthState = this.calendarMonthDataContainer.getState();
-            let newMonth = currentMonthState.selectedMonth + 1;
+
+            let newMonth: number;
+            let newYear: number;
+            if (currentMonthState.selectedMonth == 12) {
+                newMonth = 1;
+                newYear = currentMonthState.selectedYear + 1;
+            } else {
+                newMonth = currentMonthState.selectedMonth + 1;
+                newYear = currentMonthState.selectedYear;
+            }
+
             this.getTransactionsPromise(categoryState, sourceState)
                 .then(state => {
                     this.calendarMonthDataContainer.setState({
                         selectedMonth: newMonth, 
-                        selectedYear: currentDate.getFullYear(), 
+                        selectedYear: newYear, 
                         transactions: state.transactions
                     });
                 })

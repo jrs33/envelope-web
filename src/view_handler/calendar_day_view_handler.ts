@@ -20,7 +20,10 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
     
     handle(state: CalendarMonthState): boolean {
         
-        debugger;
+        let monthSpan: HTMLElement = document.getElementById('month-span');
+        monthSpan.innerHTML = '';
+        monthSpan.textContent = [CalendarDayProvider.months[state.selectedMonth - 1], state.selectedYear].join(" ");
+
         let dateGrid: HTMLElement = document.getElementById('date-grid');
         dateGrid.innerHTML = '';
 
