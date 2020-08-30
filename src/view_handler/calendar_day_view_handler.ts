@@ -45,13 +45,12 @@ class CalendarDayViewHandler implements ViewHandler<CalendarMonthState> {
         let transactionDayIndex: Map<number, Array<Transaction>> = new Map();
         debugger;
         for (let transaction of state.transactions) {
-            let date: number = transaction.date.getDate();
-            if (transactionDayIndex.has(transaction.date.getDate())) {
-                let currTransactions: Array<Transaction> = transactionDayIndex.get(date);
+            if (transactionDayIndex.has(transaction.day)) {
+                let currTransactions: Array<Transaction> = transactionDayIndex.get(transaction.day);
                 currTransactions.push(transaction);
-                transactionDayIndex.set(date, currTransactions);
+                transactionDayIndex.set(transaction.day, currTransactions);
             } else {
-                transactionDayIndex.set(date, [transaction]);
+                transactionDayIndex.set(transaction.day, [transaction]);
             }
         }
         

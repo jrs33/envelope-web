@@ -38,17 +38,35 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 		transactionDateFormGroup.className = "form-group";
 		createTransactionForm.appendChild(transactionDateFormGroup);
 
-		var createTransactionDate = document.createElement('input');
-		createTransactionDate.id = "transactionDateInput";
-		createTransactionDate.name = "date";
-		createTransactionDate.className = "form-control";
+		var createTransactionYear = document.createElement('input');
+		createTransactionYear.id = "transactionYearInput";
+		createTransactionYear.name = "year";
+		createTransactionYear.className = "form-control";
+		var createTransactionMonth = document.createElement('input');
+		createTransactionMonth.id = "transactionMonthInput";
+		createTransactionMonth.name = "month";
+		createTransactionMonth.className = "form-control";
+		var createTransactionDay = document.createElement('input');
+		createTransactionDay.id = "transactionDayInput";
+		createTransactionDay.name = "day";
+		createTransactionDay.className = "form-control";
 
-		var createTransactionDateLabel = document.createElement('label');
-		createTransactionDateLabel.setAttribute("for", createTransactionDate.id);
-		createTransactionDateLabel.textContent = "Date (YYYY-MM-DD)";
+		var createTransactionYearLabel = document.createElement('label');
+		createTransactionYearLabel.setAttribute("for", createTransactionYear.id);
+		createTransactionYearLabel.textContent = "Year";
+		var createTransactionMonthLabel = document.createElement('label');
+		createTransactionMonthLabel.setAttribute("for", createTransactionMonth.id);
+		createTransactionMonthLabel.textContent = "Month";
+		var createTransactionDayLabel = document.createElement('label');
+		createTransactionDayLabel.setAttribute("for", createTransactionDay.id);
+		createTransactionDayLabel.textContent = "Day";
 
-		transactionDateFormGroup.appendChild(createTransactionDateLabel);
-		transactionDateFormGroup.appendChild(createTransactionDate);
+		transactionDateFormGroup.appendChild(createTransactionYearLabel);
+		transactionDateFormGroup.appendChild(createTransactionYear);
+		transactionDateFormGroup.appendChild(createTransactionMonthLabel);
+		transactionDateFormGroup.appendChild(createTransactionMonth);
+		transactionDateFormGroup.appendChild(createTransactionDayLabel);
+		transactionDateFormGroup.appendChild(createTransactionDay);
 
 		// transaction name input
 		var transactionNameFormGroup = document.createElement('div');
@@ -86,6 +104,24 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 		transactionAmountFormGroup.appendChild(createTransactionAmountLabel);
 		transactionAmountFormGroup.appendChild(createTransactionAmount);
 
+		// transaction description input
+		var transactionDescriptionFormGroup = document.createElement('div');
+		transactionDescriptionFormGroup.id = "transactionDescriptionFormGroup";
+		transactionDescriptionFormGroup.className = "form-group";
+		createTransactionForm.appendChild(transactionDescriptionFormGroup);
+
+		var createTransactionDescription = document.createElement('input');
+		createTransactionDescription.id = "transactionDescriptionInput";
+		createTransactionDescription.name = "description";
+		createTransactionDescription.className = "form-control";
+
+		var createTransactionDescriptionLabel = document.createElement('label');
+		createTransactionDescriptionLabel.setAttribute("for", createTransactionDescription.id);
+		createTransactionDescriptionLabel.textContent = "Description";
+
+		transactionAmountFormGroup.appendChild(createTransactionDescriptionLabel);
+		transactionAmountFormGroup.appendChild(createTransactionDescription);
+
 		// transaction envelope select
 		var transactionEnvelopeFormGroup = document.createElement('div');
 		transactionEnvelopeFormGroup.id = "transactionEnvelopeFormGroup";
@@ -100,7 +136,7 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 
 		var createTransactionEnvelopeLabel = document.createElement('label');
 		createTransactionEnvelopeLabel.setAttribute("for", selectEnvelopeElement.id);
-		createTransactionEnvelopeLabel.textContent = "Envelope";
+		createTransactionEnvelopeLabel.textContent = "Category";
 
 		transactionEnvelopeFormGroup.appendChild(createTransactionEnvelopeLabel);
 		transactionEnvelopeFormGroup.appendChild(selectEnvelopeElement);
@@ -203,10 +239,13 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 		let transactionEnvelopeId = parseInt(transaction.target["transactionFormEnvelopeSelect"].value, 10);
 		let transactionType = transaction.target["transactionType"].value;
 		let transactionSourceId = parseInt(transaction.target["transactionFormSourceSelect"].value, 10);
-		let transactionDate = transaction.target["date"].value;
+		let transactionYear = transaction.target["year"].value;
+		let transactionMonth = transaction.target["month"].value;
+		let transactionDay = transaction.target["day"].value;
+		let transactionDescription = transaction.target["description"].value;
 
 		var rawXmlHttpRequest = new XMLHttpRequest();
-		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create');
+		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create/v2');
         var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
@@ -220,7 +259,10 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 			envelopeId: transactionEnvelopeId,
 			transactionType: transactionType,
 			sourceId: transactionSourceId,
-			date: transactionDate
+			year: transactionYear,
+			month: transactionMonth,
+			day: transactionDay,
+			description: transactionDescription
 		}));
 	}
 }

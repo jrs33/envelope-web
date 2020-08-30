@@ -14,7 +14,7 @@ class CalendarDetailsViewHandler implements ViewHandler<CalendarDetailsState> {
             
             let amountData = document.createElement('td'); amountData.textContent = "" + transaction.amount;
             let categoryData = document.createElement('td'); categoryData.textContent = "" + transaction.category;
-            let dateData = document.createElement('td'); dateData.textContent = "" + transaction.date;
+            let dateData = document.createElement('td'); dateData.textContent = [transaction.year, transaction.month, transaction.day].join("/");
             let detailData = document.createElement('td'); detailData.textContent = "" + transaction.detail;
             let methodData = document.createElement('td'); methodData.textContent = "" + transaction.method;
             let transactionData = document.createElement('td'); transactionData.textContent = "" + transaction.transaction;

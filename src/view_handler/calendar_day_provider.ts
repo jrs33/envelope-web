@@ -61,7 +61,7 @@ class CalendarDayProvider {
 
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
-            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions?from=3'); // TODO: day query
+            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions/day?month=' + month + "&year=" + year + "&day=" + date);
             
             var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
             xhr.timeout = 2000;
@@ -85,7 +85,9 @@ class CalendarDayProvider {
                             let sourceName: string = source ? source.name : "";
 
                             convertedTransaction.push({
-                                date: new Date(rawTransaction.date),
+                                year: rawTransaction.year,
+                                month: rawTransaction.month,
+                                day: rawTransaction.day,
                                 transaction: rawTransaction.transactionName,
                                 categoryId: parseInt(rawTransaction.envelopeId),
                                 category: categoryName,

@@ -17,6 +17,9 @@ const CONFIG = require('../../config.local.json');
 
 class Dashboard {
 
+    private static readonly months = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
     private static readonly ROUTE_TO_ACTION: string = 'dashboard';
     private static instance: Dashboard;
 
@@ -79,13 +82,17 @@ class Dashboard {
             this.formTabsDataContainer.setState({link: ActiveLinks.METHOD, sourceCategoryState: {sourceState: this.sourceDataContainer.getState(), categoryState: this.categoryDataContainer.getState()}});
         });
         
-        let transactionPromise: Promise<CalendarDetailsState> = this.getTransactionsPromise(categoryState, sourceState);
+        let currentDate = new Date();
+        let transactionPromise: Promise<CalendarDetailsState> = this.getTransactionsPromise(currentDate.getMonth()+1, currentDate.getFullYear(), categoryState, sourceState);
         this.calendarDetailsDataContainer.setState(await transactionPromise);
-        this.calendarDetailsDescriptionDataContainer.setState({describe: "All Time"});
+        this.calendarDetailsDescriptionDataContainer.setState({describe: [Dashboard.months[currentDate.getMonth()], currentDate.getDate()].join(" ")});
         this.remainingDataContainer.setState({value: await this.getRemaining()});
 
-        let currentDate = new Date();
-        this.calendarMonthDataContainer.setState({selectedMonth: currentDate.getMonth() + 1, selectedYear: currentDate.getFullYear(), transactions: (await transactionPromise).transactions});
+        this.calendarMonthDataContainer.setState({
+            selectedMonth: currentDate.getMonth() + 1, 
+            selectedYear: currentDate.getFullYear(), 
+            transactions: (await transactionPromise).transactions
+        });
         document.getElementById("previous-month").addEventListener("click", event => {
             let currentMonthState = this.calendarMonthDataContainer.getState();
             
@@ -99,8 +106,9 @@ class Dashboard {
                 newYear = currentMonthState.selectedYear;
             }
 
-            this.getTransactionsPromise(categoryState, sourceState)
+            this.getTransactionsPromise(newMonth, newYear, categoryState, sourceState)
                 .then(state => {
+                    debugger;
                     this.calendarMonthDataContainer.setState({
                         selectedMonth: newMonth, 
                         selectedYear: newYear, 
@@ -122,8 +130,9 @@ class Dashboard {
                 newYear = currentMonthState.selectedYear;
             }
 
-            this.getTransactionsPromise(categoryState, sourceState)
+            this.getTransactionsPromise(newMonth, newYear, categoryState, sourceState)
                 .then(state => {
+                    debugger;
                     this.calendarMonthDataContainer.setState({
                         selectedMonth: newMonth, 
                         selectedYear: newYear, 
@@ -138,7 +147,8 @@ class Dashboard {
         
         switch(action) {
             case ViewActions.TRANSACTION_CREATED: {
-                this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise(this.categoryDataContainer.getState(), this.sourceDataContainer.getState()));
+                let calendarMonthState: CalendarMonthState = this.calendarMonthDataContainer.getState();
+                this.calendarDetailsDataContainer.setState(await this.getTransactionsPromise(calendarMonthState.selectedMonth, calendarMonthState.selectedYear, this.categoryDataContainer.getState(), this.sourceDataContainer.getState()));
                 this.remainingDataContainer.setState({value: await this.getRemaining()});
             }
             default: {
@@ -147,11 +157,11 @@ class Dashboard {
         }
     }
 
-    private getTransactionsPromise(categoryState: CategoryState, sourceState: SourceState): Promise<CalendarDetailsState> {
+    private getTransactionsPromise(month: number, year: number, categoryState: CategoryState, sourceState: SourceState): Promise<CalendarDetailsState> {
         
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
-            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions?from=0');
+            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions/date/all?month=' + month + '&year=' + year);
             
             var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
             xhr.timeout = 2000;
@@ -175,7 +185,9 @@ class Dashboard {
                             let sourceName: string = source ? source.name : "";
 
                             convertedTransaction.push({
-                                date: new Date(rawTransaction.date),
+                                year: rawTransaction.year,
+                                month: rawTransaction.month,
+                                day: rawTransaction.day,
                                 transaction: rawTransaction.transactionName,
                                 categoryId: parseInt(rawTransaction.envelopeId),
                                 category: categoryName,

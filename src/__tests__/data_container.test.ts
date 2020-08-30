@@ -4,7 +4,9 @@ test('makes sure state is set', () => {
     let detailsContainer: CalendarDetailsDataContainer = CalendarDetailsDataContainer.getInstance();
 
     let transaction: Transaction = {
-        date: new Date(), 
+        year: 2020,
+        month: 3,
+        day: 3, 
         transaction: "a_test_transaction",
         category: "Test",
         method: "Chase Card",

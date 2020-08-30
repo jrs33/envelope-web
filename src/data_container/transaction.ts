@@ -1,5 +1,7 @@
 export default interface Transaction {
-    readonly date: Date;
+    readonly year: number;
+    readonly month: number;
+    readonly day: number;
     readonly transaction: string;
 
     readonly categoryId: number;

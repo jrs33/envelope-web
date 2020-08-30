@@ -89,10 +89,10 @@ class CentralMediator {
                 return true;
             }
             case Actions.UPDATE_MONTH: {
-                this.calendarDayViewHandler.handle(this.calendarMonthDataContainer.getState());
+                return this.calendarDayViewHandler.handle(this.calendarMonthDataContainer.getState());
             }
             case Actions.FORM_TAB_CLICKED: {
-                this.formTabsViewHandler.handle(this.formTabsDataContainer.getState());
+                return this.formTabsViewHandler.handle(this.formTabsDataContainer.getState());
             }
             default: {
                 console.log("unrecognized_action: " + action);
