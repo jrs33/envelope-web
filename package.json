@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "build-dev": "webpack --mode=development",
+    "build": "webpack -p",
     "clean_install": "rm -rf node_modules/ && npm install",
     "start-dev": "NODE_ENV=development node server.js",
     "start": "node server.js",
