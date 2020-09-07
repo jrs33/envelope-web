@@ -13,8 +13,6 @@ import { ViewActions } from '../view_handler/view_actions';
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 import { ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
 
-const CONFIG = require('../../config.local.json');
-
 class Dashboard {
 
     private static readonly months = ["January", "February", "March", "April", "May", "June",
@@ -161,7 +159,7 @@ class Dashboard {
         
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
-            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions/date/all?month=' + month + '&year=' + year);
+            rawXmlHttpRequest.open('GET', process.env.ENVELOPE_API_URL + '/transactions/date/all?month=' + month + '&year=' + year);
             
             var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
             xhr.timeout = 2000;
@@ -215,7 +213,7 @@ class Dashboard {
         
         return new Promise(function (resolve, reject) {
 			var rawXmlHttpRequest = new XMLHttpRequest();
-			rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/envelope/statistics/remaining')
+			rawXmlHttpRequest.open('GET', process.env.ENVELOPE_API_URL + '/envelope/statistics/remaining')
 			var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
 
 			xhr.onreadystatechange = function() {
@@ -236,7 +234,7 @@ class Dashboard {
     private getCategories(): Promise<CategoryState> {
         return new Promise(function (resolve, reject) {
             var rawXmlRequest = new XMLHttpRequest();
-            rawXmlRequest.open('GET', CONFIG.envelope_api.host + '/envelopes?from=0');
+            rawXmlRequest.open('GET', process.env.ENVELOPE_API_URL + '/envelopes?from=0');
 
             var xhr = new AuthorizationDecorator(rawXmlRequest).decorate();
             xhr.onreadystatechange = function() {
@@ -268,7 +266,7 @@ class Dashboard {
     private getSources(): Promise<SourceState> {
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
-            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/sources');
+            rawXmlHttpRequest.open('GET', process.env.ENVELOPE_API_URL + '/sources');
             var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
             xhr.timeout = 2000;
             xhr.onreadystatechange = function() {
