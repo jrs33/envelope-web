@@ -235,8 +235,9 @@ class Dashboard {
 
     private getCategories(): Promise<CategoryState> {
         return new Promise(function (resolve, reject) {
+            debugger;
             var rawXmlRequest = new XMLHttpRequest();
-            rawXmlRequest.open('GET', 'https://peaceful-forest-68892.herokuapp.com' + '/envelopes?from=0');
+            rawXmlRequest.open('GET', process.env.ENVELOPE_API_URL + '/envelopes?from=0');
 
             var xhr = new AuthorizationDecorator(rawXmlRequest).decorate();
             xhr.onreadystatechange = function() {
