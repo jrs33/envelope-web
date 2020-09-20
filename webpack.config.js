@@ -20,14 +20,14 @@ module.exports = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      'AUTH_AUDIENCE': '',
-      'AUTH_CLIENT_ID': '',
-      'AUTH_DOMAIN': '',
-      'AUTH_REDIRECT_URI': '',
-      'AUTH_RESPONSE_TYPE': '',
-      'AUTH_SCOPE': '',
-      'ENVELOPE_API_URL': 'http://localhost:8033',
-      'NODE_ENV': 'development'
+      AUTH_AUDIENCE: '',
+      AUTH_CLIENT_ID: '',
+      AUTH_DOMAIN: '',
+      AUTH_REDIRECT_URI: '',
+      AUTH_RESPONSE_TYPE: '',
+      AUTH_SCOPE: '',
+      ENVELOPE_API_URL: 'http://localhost:8033',
+      NODE_ENV: 'development'
     })
   ],
   output: {
