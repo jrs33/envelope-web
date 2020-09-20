@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 
+// loads all values from .env into process.env
+require('dotenv').config();
+
 module.exports = {
   entry: './src/main.ts',
   devServer: {
