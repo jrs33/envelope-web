@@ -10,12 +10,16 @@
     "clean_install": "rm -rf node_modules/ && npm install",
     "start-dev": "NODE_ENV=development node server.js",
     "start": "node server.js",
-    "heroku-postbuild": "webpack -p"
+    "heroku-postbuild": "webpack -p",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
     "jest": "^26.2.2",
     "ts-jest": "^26.1.4",
     "webpack-dev-server": "^3.11.0"
