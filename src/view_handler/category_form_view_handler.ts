@@ -1,8 +1,6 @@
 import { ViewHandler } from "./view_handler";
 import { AuthorizationDecorator } from "../auth/auth_decorator";
 
-const CONFIG = require('../../config.local.json');
-
 class CategoryFormViewHandler implements ViewHandler<void> {
 
     constructor() {}
@@ -118,7 +116,7 @@ class CategoryFormViewHandler implements ViewHandler<void> {
         let envelopeType = envelope.target["envelopeFormTypeSelect"].value;
     
         var rawXMLRequest = new XMLHttpRequest();
-        rawXMLRequest.open('POST', CONFIG.envelope_api.host + '/envelope/create');
+        rawXMLRequest.open('POST', process.env.ENVELOPE_API_URL + '/envelope/create');
         var xhr = new AuthorizationDecorator(rawXMLRequest).decorate();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {

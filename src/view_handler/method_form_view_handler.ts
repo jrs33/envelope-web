@@ -1,8 +1,6 @@
 import { ViewHandler } from "./view_handler";
 import { AuthorizationDecorator } from "../auth/auth_decorator";
 
-const CONFIG = require('../../config.local.json');
-
 class MethodFormViewHandler implements ViewHandler<void> {
 
     constructor() {}
@@ -87,7 +85,7 @@ class MethodFormViewHandler implements ViewHandler<void> {
         let name = source.target["name"].value;
         
         var rawRequest = new XMLHttpRequest();
-        rawRequest.open('POST', CONFIG.envelope_api.host + '/source/create');
+        rawRequest.open('POST', process.env.ENVELOPE_API_URL + '/source/create');
         var xhr = new AuthorizationDecorator(rawRequest).decorate();
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4 && xhr.status == 200) {

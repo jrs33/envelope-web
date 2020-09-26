@@ -4,8 +4,6 @@ import { Dashboard } from '../composites/dashboard';
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 import { ViewActions } from './view_actions';
 
-const CONFIG = require('../../config.local.json');
-
 class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite> {
 
     constructor() {}
@@ -245,7 +243,7 @@ class TransactionFormViewHandler implements ViewHandler<SourceCategoryComposite>
 		let transactionDescription = transaction.target["description"].value;
 
 		var rawXmlHttpRequest = new XMLHttpRequest();
-		rawXmlHttpRequest.open('POST', CONFIG.envelope_api.host + '/transaction/create/v2');
+		rawXmlHttpRequest.open('POST', process.env.ENVELOPE_API_URL + '/transaction/create/v2');
         var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {

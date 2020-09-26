@@ -1,8 +1,6 @@
 import { Router } from '../routing/router';
 import { AUTH } from './auth';
 
-const CONFIG = require('../../config.local.json');
-
 class Logout {
 
     static readonly ROUTE_TO_ACTION = 'logout';
@@ -25,8 +23,7 @@ class Logout {
 
     async connect() {
         AUTH.logout({
-            returnTo: CONFIG.auth.returnTo,
-            clientID: CONFIG.auth.client_id
+            clientID: process.env.AUTH_CLIENT_ID
         });
     }
 }

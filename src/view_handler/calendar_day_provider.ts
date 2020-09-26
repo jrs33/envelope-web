@@ -6,8 +6,6 @@ import { CalendarDetailsDataContainer } from "../data_container/calendar_details
 import { CentralMediator, Actions } from "../mediator/mediator";
 import { CalendarDetailsDescriptionDataContainer } from "../data_container/calendar_details_description_container";
 
-const CONFIG = require('../../config.local.json');
-
 class CalendarDayProvider {
 
     public static readonly months = ["January", "February", "March", "April", "May", "June",
@@ -61,7 +59,7 @@ class CalendarDayProvider {
 
         return new Promise(function (resolve, reject) {
             var rawXmlHttpRequest = new XMLHttpRequest();
-            rawXmlHttpRequest.open('GET', CONFIG.envelope_api.host + '/transactions/day?month=' + month + "&year=" + year + "&day=" + date);
+            rawXmlHttpRequest.open('GET', process.env.ENVELOPE_API_URL + '/transactions/day?month=' + month + "&year=" + year + "&day=" + date);
             
             var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
             xhr.timeout = 2000;
