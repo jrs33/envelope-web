@@ -2,7 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 
 // loads all values from .env into process.env
-require('dotenv').config();
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config({path: '${__dirname}/.env.development'});
+} else {
+  require('dotenv').config({path: '${__dirname}/.env'});
+}
 
 module.exports = {
   entry: './src/main.ts',
@@ -30,7 +34,7 @@ module.exports = {
       AUTH_RESPONSE_TYPE: '',
       AUTH_SCOPE: '',
       ENVELOPE_API_URL: 'http://localhost:8033',
-      NODE_ENV: 'development'
+      NODE_ENV: 'development' // use 'development' unless process.env.NODE_ENV is defined
     })
   ],
   output: {

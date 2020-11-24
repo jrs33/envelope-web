@@ -1,13 +1,14 @@
 import { Dashboard } from './composites/dashboard';
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
+import * as dotenv from "dotenv";
 
 export var id = null;
 export var access = null;
 
 const app = async () => {
 
-    if (process.env.NODE_ENV == 'development') { 
+    if (process.env.NODE_ENV === 'development') { 
         console.log('running_in_dev_env');
         let dashboardConnector = Dashboard.getInstance();
         let logout = new Logout();
