@@ -3,7 +3,7 @@
 
 Save that $$$
 
-Local Dev Setup Instructions:
+## Local Dev Setup Instructions:
 
 0) Designed to be used w/ the corresponding [API](https://github.com/jrs33/envelope-api). Also note the included `.env.development` file expects this API to be running locally on port 8033.
 1) Build the dev image `docker build --file Dockerfile.dev --tag envelope-web:1.0 .`
