@@ -1,7 +1,6 @@
 import { Dashboard } from './composites/dashboard';
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
-import * as dotenv from "dotenv";
 
 export var id = null;
 export var access = null;
@@ -15,12 +14,11 @@ const app = async () => {
         dashboardConnector.connect();
     } else {
         AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
-            debugger;
             if(authResult && authResult.accessToken && authResult.idToken) {
                 id = authResult.idToken;
                 access = authResult.accessToken;
             } else {
-                console.log("auth missing: " + error);
+                console.log("auth missing: " + error.description);
                 AUTH.authorize();
             }
     

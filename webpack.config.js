@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 // loads all values from .env into process.env
 if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config({path: '${__dirname}/.env.development'});
+  require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')});
 } else {
-  require('dotenv').config({path: '${__dirname}/.env'});
+  require('dotenv').config({path: path.resolve(process.cwd(), '.env')});
 }
 
 module.exports = {
