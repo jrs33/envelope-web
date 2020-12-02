@@ -18,7 +18,7 @@ const app = async () => {
                 id = authResult.idToken;
                 access = authResult.accessToken;
             } else {
-                console.log("auth missing: " + error.description);
+                console.log("auth missing: " + error);
                 AUTH.authorize();
             }
     
