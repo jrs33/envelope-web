@@ -63,7 +63,6 @@ class Dashboard {
 
     async connect() {
 
-        debugger;
         let initialTemplate: string = this.getInitialTemplate();
         document.getElementById('container').innerHTML = initialTemplate;
 

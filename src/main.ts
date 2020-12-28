@@ -1,4 +1,6 @@
 import { Dashboard } from './composites/dashboard';
+import { Goals } from './composites/goals';
+
 import { Logout } from './auth/logout';
 import { AUTH } from './auth/auth';
 
@@ -11,6 +13,7 @@ const app = async () => {
         console.log('running_in_dev_env');
         let dashboardConnector = Dashboard.getInstance();
         let logout = new Logout();
+        let goals = Goals.getInstance();
         dashboardConnector.connect();
     } else {
         AUTH.parseHash({hash: window.location.hash}, (error, authResult) => {
@@ -24,6 +27,7 @@ const app = async () => {
     
             let dashboardConnector = Dashboard.getInstance();
             let logout = new Logout();
+            let goals = Goals.getInstance();
             dashboardConnector.connect();
         });
     }
