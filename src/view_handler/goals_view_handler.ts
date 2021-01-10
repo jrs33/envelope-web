@@ -18,6 +18,7 @@ class GoalsViewHandler implements ViewHandler<GoalState> {
     }
 
     private constructGoalCard(goal: Goal): HTMLElement {
+        debugger;
         let cardColumns = document.createElement('div');
         cardColumns.className = 'col-sm-6';
 
@@ -37,8 +38,8 @@ class GoalsViewHandler implements ViewHandler<GoalState> {
         var cardProgressBar = document.createElement('div');
         cardProgressBar.className = 'progress-bar';
         let progressPercentage : number = (goal.goalProgress / goal.goalAmount) * 100.0;
-        cardProgressBar.style.width = progressPercentage + '%;';
-        cardProgressBar.textContent = goal.goalProgress + '';
+        cardProgressBar.style.width = progressPercentage + '%';
+        cardProgressBar.textContent = '$' + goal.goalProgress;
 
         cardProgressDiv.appendChild(cardProgressBar);
         cardBody.appendChild(cardHeader);

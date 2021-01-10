@@ -16,6 +16,7 @@ import { RemainingViewHandler } from '../view_handler/remaining_view_handler';
 import { TransactionFormViewHandler } from '../view_handler/transaction_form_view_handler';
 import { CalendarDayViewHandler } from '../view_handler/calendar_day_view_handler';
 import { GoalsViewHandler } from '../view_handler/goals_view_handler';
+import { GoalFormViewHandler } from '../view_handler/goals_form_view_handler';
 
 import { Actions } from './actions';
 import { ActiveLinkState, FormTabsCompositeViewHandler, ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
@@ -43,6 +44,8 @@ class CentralMediator {
     private calendarDayViewHandler: ViewHandler<CalendarMonthState>;
     private formTabsViewHandler: ViewHandler<ActiveLinkState>;
     private goalViewHandler: ViewHandler<GoalState>;
+    private goalUpdateFormViewHandler: ViewHandler<GoalState>;
+    private goalFormViewHandler: ViewHandler<void>;
 
     private constructor() {
 
@@ -62,6 +65,7 @@ class CentralMediator {
         this.calendarDayViewHandler = new CalendarDayViewHandler();
         this.formTabsViewHandler = new FormTabsCompositeViewHandler();
         this.goalViewHandler = new GoalsViewHandler();
+        this.goalFormViewHandler = new GoalFormViewHandler();
     }
 
     static getInstance(): CentralMediator {
@@ -101,7 +105,11 @@ class CentralMediator {
                 return this.formTabsViewHandler.handle(this.formTabsDataContainer.getState());
             }
             case Actions.UPDATE_GOALS: {
-                return this.goalViewHandler.handle(this.goalDataContainer.getState());
+                return this.goalViewHandler.handle(this.goalDataContainer.getState()) 
+                && this.goalUpdateFormViewHandler.handle(this.goalDataContainer.getState());
+            }
+            case Actions.GOAL_FORM_RENDER: {
+                return this.goalFormViewHandler.handle(null);
             }
             default: {
                 console.log("unrecognized_action: " + action);
