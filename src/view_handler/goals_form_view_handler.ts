@@ -98,7 +98,6 @@ class GoalFormViewHandler implements ViewHandler<void> {
     }
 
     private createGoal(goal, callback) {
-        debugger;
         goal.preventDefault();
 
         let name = goal.target["name"].value;

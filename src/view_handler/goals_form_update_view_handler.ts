@@ -83,22 +83,22 @@ class GoalUpdateFormViewHandler implements ViewHandler<GoalState> {
     }
 
     private updateGoal(goalUpdate, callback) {
-        debugger;
         goalUpdate.preventDefault();
 
         let id = goalUpdate.target["id"].value;
         let amount = goalUpdate.target["amount"].value;
         
         var rawRequest = new XMLHttpRequest();
-        rawRequest.open('PATCH', process.env.ENVELOPE_API_URL + '/goal/progress/increase?amount=' + amount + '&goalId=' + id);
-        var xhr = new AuthorizationDecorator(rawRequest).decorate();
-        xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 && xhr.status == 200) {
+        let requestUrl = process.env.ENVELOPE_API_URL + '/goal/progress/increase?amount=' + amount + '&goalId=' + id
+        rawRequest.open('PATCH', requestUrl);
+        var authedRequest = new AuthorizationDecorator(rawRequest).decorate();
+        authedRequest.onreadystatechange = function() {
+            if(authedRequest.readyState == 4 && authedRequest.status == 200) {
                 callback();
             }
         };
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send();
+        authedRequest.setRequestHeader('Content-Type', 'application/json');
+        authedRequest.send(JSON.stringify({}));
     };
 
     private renderUpdateGoalOptions(selectGoalElement: HTMLSelectElement, goals: Array<Goal>): void{

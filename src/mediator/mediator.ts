@@ -17,6 +17,7 @@ import { TransactionFormViewHandler } from '../view_handler/transaction_form_vie
 import { CalendarDayViewHandler } from '../view_handler/calendar_day_view_handler';
 import { GoalsViewHandler } from '../view_handler/goals_view_handler';
 import { GoalFormViewHandler } from '../view_handler/goals_form_view_handler';
+import { GoalUpdateFormViewHandler } from '../view_handler/goals_form_update_view_handler';
 
 import { Actions } from './actions';
 import { ActiveLinkState, FormTabsCompositeViewHandler, ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
@@ -66,6 +67,7 @@ class CentralMediator {
         this.formTabsViewHandler = new FormTabsCompositeViewHandler();
         this.goalViewHandler = new GoalsViewHandler();
         this.goalFormViewHandler = new GoalFormViewHandler();
+        this.goalUpdateFormViewHandler = new GoalUpdateFormViewHandler();
     }
 
     static getInstance(): CentralMediator {
