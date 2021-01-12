@@ -38,5 +38,12 @@ class GoalDataContainer implements DataContainer<GoalState> {
 
     setState(newState: GoalState): void {
         this.state = newState;
+        CentralMediator.getInstance().dispatch(Actions.UPDATE_GOALS);
+    }
+
+    getAction(): Actions {
+        return Actions.UPDATE_GOALS;
     }
 }
+
+export { GoalState, Goal, GoalDataContainer };

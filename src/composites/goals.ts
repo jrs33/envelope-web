@@ -1,5 +1,10 @@
 import { Router } from '../routing/router';
 
+import { Goal, GoalState, GoalDataContainer } from '../data_container/goal_data_container';
+
+import { AuthorizationDecorator } from '../auth/auth_decorator';
+import { CentralMediator, Actions } from '../mediator/mediator';
+
 class Goals {
 
     private static readonly ROUTE_TO_ACTION: string = 'goals';
@@ -8,10 +13,14 @@ class Goals {
     private router: Router;
     private route: String;
 
+    private goalDataContainer: GoalDataContainer;
+
     private constructor() {
 
         this.router = new Router();
         this.route = this.router.getRoute();
+
+        this.goalDataContainer = GoalDataContainer.getInstance();
 
         this.router.eventSource.addEventListener("routechange", () => {
             this.route = this.router.getRoute();
@@ -33,10 +42,48 @@ class Goals {
         
         let initialTemplate: string = this.getInitialTemplate();
         document.getElementById('container').innerHTML = initialTemplate;
+
+        // initialize the html element state
+        let goals: Array<Goal> = await this.getGoals();
+        this.goalDataContainer.setState({goals: goals});
+
+        CentralMediator.getInstance().dispatch(Actions.GOAL_FORM_RENDER);
+    }
+
+    private getGoals(): Promise<Array<Goal>> {
+        
+        return new Promise(function (resolve, reject) {
+			var rawXmlHttpRequest = new XMLHttpRequest();
+			rawXmlHttpRequest.open('GET', process.env.ENVELOPE_API_URL + '/goals?from=0');
+			var xhr = new AuthorizationDecorator(rawXmlHttpRequest).decorate();
+
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if (xhr.status == 200) {
+                        let goalRawJson: Array<any> = JSON.parse(xhr.response);
+                        let goals: Array<Goal> = [];
+                        for (let rawGoal of goalRawJson) {
+                            goals.push({
+                                id: rawGoal.id,
+                                userId: rawGoal.userId,
+                                name: rawGoal.name,
+                                goalAmount: rawGoal.goalAmount,
+                                goalProgress: rawGoal.goalProgress
+                            });
+                        }
+						resolve(goals);
+					} else {
+                        console.log("goal_fetch_error: " + xhr.status);
+						reject("ERROR");
+					}
+				}
+			};
+			xhr.send();
+		});
     }
 
     private getInitialTemplate(): string {
-        return '<h1>Goals</h1><hr><div class="row"><div class="col-5"><div style="border: 1px solid lightgray; padding:20px;"><div id="goal-form" style="margin-top: 20px;"></div></div></div><div class="col-7"><div class="row"><div class="col-sm-6"><div class="card"><div class="card-body"><h5 class="card-title">Special title treatment</h5><p class="card-text">With supporting text below as a natural lead-in to additional content.</p><div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></div></div></div><div class="col-sm-6"><div class="card"><div class="card-body"><h5 class="card-title">Special title treatment</h5><p class="card-text">With supporting text below as a natural lead-in to additional content.</p><div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></div></div></div><div class="col-sm-6"><div class="card"><div class="card-body"><h5 class="card-title">Special title treatment</h5><p class="card-text">With supporting text below as a natural lead-in to additional content.</p><div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></div></div></div><div class="col-sm-6"><div class="card"><div class="card-body"><h5 class="card-title">Special title treatment</h5><p class="card-text">With supporting text below as a natural lead-in to additional content.</p><div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></div></div></div></div></div></div>';
+        return '<h1>Goals</h1><hr><div class="row"><div class="col-5"><div style="border: 1px solid lightgray; padding:20px;"><div id="goal-form" style="margin-top: 20px;"></div></div></div><div class="col-7"><div id="goal-state" class="row"></div></div><div class="col-5"><div style="border: 1px solid lightgray; padding:20px;"><div id="goal-update-form" style="margin-top: 20px;"></div></div></div></div>';
     }
 
 
@@ -50,51 +97,12 @@ class Goals {
             </div>
         </div>
         <div class="col-7">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+            <div id="goal-state" class="row">
+            </div>
+        </div>
+        <div class="col-5">
+            <div style="border: 1px solid lightgray; padding:20px;">
+                <div id="goal-update-form" style="margin-top: 20px;"></div>
             </div>
         </div>
     </div>
