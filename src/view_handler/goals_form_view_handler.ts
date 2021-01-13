@@ -1,5 +1,7 @@
 import { ViewHandler } from "./view_handler";
 import { AuthorizationDecorator } from "../auth/auth_decorator";
+import { CentralMediator } from "../mediator/mediator";
+import { ViewActions } from "./view_actions";
 
 class GoalFormViewHandler implements ViewHandler<void> {
 
@@ -89,9 +91,10 @@ class GoalFormViewHandler implements ViewHandler<void> {
 
         createGoalForm.addEventListener('submit', event => {
             this.createGoal(event, () => {
-                // TODO: confirmation
+                createGoalForm.reset();
+
+                CentralMediator.getInstance().dispatchViewAction(ViewActions.GOAL_CREATED);
             });
-            createGoalForm.reset();
         });
 
         return createGoalForm;

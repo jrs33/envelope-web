@@ -22,6 +22,8 @@ import { GoalUpdateFormViewHandler } from '../view_handler/goals_form_update_vie
 import { Actions } from './actions';
 import { ActiveLinkState, FormTabsCompositeViewHandler, ActiveLinks } from '../view_handler/form_tabs_composite_view_handler';
 import { FormTabsDataContainer } from '../data_container/form_tabs_data_container';
+import { ViewActions } from '../view_handler/view_actions';
+import { Goals } from '../composites/goals';
 
 class CentralMediator {
 
@@ -116,6 +118,18 @@ class CentralMediator {
             default: {
                 console.log("unrecognized_action: " + action);
                 break;
+            }
+        }
+    }
+
+    dispatchViewAction(action: ViewActions) {
+        
+        switch (action) {
+            case ViewActions.GOAL_CREATED: {
+                Goals.getInstance().dispatch(ViewActions.GOAL_CREATED);
+            }
+            case ViewActions.GOAL_UPDATED: {
+                Goals.getInstance().dispatch(ViewActions.GOAL_UPDATED);
             }
         }
     }

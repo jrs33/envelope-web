@@ -4,6 +4,7 @@ import { Goal, GoalState, GoalDataContainer } from '../data_container/goal_data_
 
 import { AuthorizationDecorator } from '../auth/auth_decorator';
 import { CentralMediator, Actions } from '../mediator/mediator';
+import { ViewActions } from '../view_handler/view_actions';
 
 class Goals {
 
@@ -50,6 +51,19 @@ class Goals {
         CentralMediator.getInstance().dispatch(Actions.GOAL_FORM_RENDER);
     }
 
+    async dispatch(action: ViewActions) {
+        
+        switch(action) {
+            case ViewActions.GOAL_UPDATED:
+            case ViewActions.GOAL_CREATED: {
+                this.goalDataContainer.setState({goals: await this.getGoals()});
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
     private getGoals(): Promise<Array<Goal>> {
         
         return new Promise(function (resolve, reject) {
@@ -85,28 +99,6 @@ class Goals {
     private getInitialTemplate(): string {
         return '<h1>Goals</h1><hr><div class="row"><div class="col-5"><div style="border: 1px solid lightgray; padding:20px;"><div id="goal-form" style="margin-top: 20px;"></div></div></div><div class="col-7"><div id="goal-state" class="row"></div></div><div class="col-5"><div style="border: 1px solid lightgray; padding:20px;"><div id="goal-update-form" style="margin-top: 20px;"></div></div></div></div>';
     }
-
-
-    /*
-    <h1>Goals</h1>
-    <hr>
-    <div class="row">
-        <div class="col-5">
-            <div style="border: 1px solid lightgray; padding:20px;">
-                <div id="goal-form" style="margin-top: 20px;"></div>
-            </div>
-        </div>
-        <div class="col-7">
-            <div id="goal-state" class="row">
-            </div>
-        </div>
-        <div class="col-5">
-            <div style="border: 1px solid lightgray; padding:20px;">
-                <div id="goal-update-form" style="margin-top: 20px;"></div>
-            </div>
-        </div>
-    </div>
-    */
 }
 
 export { Goals };

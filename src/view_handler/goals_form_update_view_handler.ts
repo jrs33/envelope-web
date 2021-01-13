@@ -2,6 +2,8 @@ import { ViewHandler } from "./view_handler";
 import { AuthorizationDecorator } from "../auth/auth_decorator";
 
 import { Goal, GoalState } from '../data_container/goal_data_container';
+import { CentralMediator } from "../mediator/mediator";
+import { ViewActions } from "./view_actions";
 
 class GoalUpdateFormViewHandler implements ViewHandler<GoalState> {
 
@@ -74,9 +76,10 @@ class GoalUpdateFormViewHandler implements ViewHandler<GoalState> {
 
         updateGoalForm.addEventListener('submit', event => {
             this.updateGoal(event, () => {
-                // TODO: confirmation
+                updateGoalForm.reset();
+
+                CentralMediator.getInstance().dispatchViewAction(ViewActions.GOAL_UPDATED);
             });
-            updateGoalForm.reset();
         });
 
         return updateGoalForm;
