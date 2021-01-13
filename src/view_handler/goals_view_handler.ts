@@ -42,7 +42,7 @@ class GoalsViewHandler implements ViewHandler<GoalState> {
         cardProgressBar.className = 'progress-bar';
         let progressPercentage = (goal.goalProgress / goal.goalAmount) * 100.0;
         cardProgressBar.style.width = progressPercentage + '%';
-        cardProgressBar.textContent = '$' + goal.goalProgress;
+        cardProgressBar.textContent = progressPercentage + '%';
 
         cardProgressDiv.appendChild(cardProgressBar);
         cardBody.appendChild(cardHeader);
@@ -56,17 +56,3 @@ class GoalsViewHandler implements ViewHandler<GoalState> {
 }
 
 export { GoalsViewHandler };
-
-/*
-<div class="col-sm-6">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-            </div>
-        </div>
-    </div>
-</div>
-*/

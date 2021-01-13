@@ -76,7 +76,7 @@ class GoalFormViewHandler implements ViewHandler<void> {
 
         var createGoalProgressLabel = document.createElement('label');
         createGoalProgressLabel.setAttribute("for", createGoalProgress.id);
-        createGoalProgressLabel.textContent = "Goal Amount";
+        createGoalProgressLabel.textContent = "Goal Progress";
 
         goalNameFormGroup.appendChild(createGoalProgressLabel);
         goalNameFormGroup.appendChild(createGoalProgress);
